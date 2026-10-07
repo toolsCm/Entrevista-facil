@@ -2,7 +2,7 @@
 <style>
 :root{--p:#5b4ee8;--bg:#f1effb;--card:#fff;--line:#dadce0;--text:#202124;--muted:#5f6368}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.bar{position:sticky;top:0;z-index:30;height:62px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 18px}.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#745ff2,#4f46e5);color:#fff;display:grid;place-items:center}.btn{border:0;border-radius:8px;padding:10px 15px;font-weight:700}.primary{background:var(--p);color:#fff}.soft{background:#eeeaff;color:#4034bf}.ghost{background:#fff;border:1px solid var(--line)}.danger{background:#fce8e6;color:#b3261e}.tabs{position:sticky;top:62px;z-index:25;height:50px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;justify-content:center}.tab{position:relative;border:0;background:transparent;padding:0 18px;font-weight:600}.tab.active{color:#3f2db6}.tab.active:after{content:"";position:absolute;left:5px;right:5px;bottom:0;height:4px;border-radius:4px 4px 0 0;background:var(--p);animation:grow .18s}@keyframes grow{from{transform:scaleX(.4);opacity:.4}to{transform:none;opacity:1}}main{max-width:940px;margin:auto;padding:14px 14px 70px}.sheet{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 7px rgba(60,64,67,.13);overflow:hidden;margin-bottom:14px}.header{border-top:10px solid var(--p)}.banner{height:150px;background:linear-gradient(135deg,#7467f3,#ada5fb);background-size:cover;background-position:center;position:relative}.banner .tools{position:absolute;right:10px;bottom:10px;display:flex;gap:7px}.banner label,.banner button{background:#fff;border:0;border-radius:7px;padding:8px 10px}.headbody{padding:24px}.title{width:100%;border:0;border-bottom:1px solid transparent;outline:none;font-size:30px;margin-bottom:8px}.desc{width:100%;border:0;outline:none;resize:none;color:var(--muted)}.ai{padding:18px}.ai textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical}.airow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}.pills{display:flex;gap:8px;margin-top:10px}.pill{border:1px solid var(--line);border-radius:999px;background:#fff;padding:7px 12px}.pill.on{border-color:var(--p);background:#eeeaff;color:#4034bf}.qcard{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(60,64,67,.1);animation:in .18s}.qcard.active{border-left:6px solid #4285f4;box-shadow:0 3px 10px rgba(60,64,67,.18)}@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}.drag{text-align:center;color:#aaa;padding:5px}.qbody{padding:8px 22px 18px}.qtop{display:grid;grid-template-columns:1fr 245px;gap:18px}.qtitle{width:100%;border:0;border-bottom:1px solid var(--line);background:#f8f9fa;padding:13px;outline:none}.typebtn{width:100%;border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px;text-align:left}.opts{margin-top:15px;display:grid;gap:10px}.orow{display:flex;align-items:center;gap:9px}.dot,.box{width:21px;height:21px;border:2px solid #9aa0a6;flex:0 0 auto}.dot{border-radius:50%}.box{border-radius:3px}.orow input{flex:1;border:0;border-bottom:1px solid transparent;padding:7px 2px}.remove{border:0;background:transparent;font-size:20px;color:#777}.addopt{border:0;background:transparent;color:var(--p);padding:4px 0;text-align:left}.qfoot{margin-top:16px;padding-top:11px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;align-items:center;gap:8px}.icon{width:38px;height:38px;border:0;background:transparent;border-radius:50%}.icon:hover{background:#f1f3f4}.switch{position:relative;width:38px;height:22px;display:inline-block}.switch input{opacity:0}.slider{position:absolute;inset:0;background:#bdc1c6;border-radius:30px;transition:.2s}.slider:before{content:"";position:absolute;width:18px;height:18px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:#8378ef}.switch input:checked+.slider:before{transform:translateX(16px);background:#5b4ee8}.addwrap{text-align:center;margin:18px}.addq{border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 20px;font-weight:700;box-shadow:0 2px 6px rgba(60,64,67,.12)}.sectiontitle{padding:25px 30px;font-size:24px}.setrow{border-top:1px solid var(--line);padding:22px 34px;display:flex;justify-content:space-between;gap:20px;align-items:center}.copy strong{display:block;font-size:18px;margin-bottom:4px}.copy span,.mini{font-size:13px;color:var(--muted)}.accbtn{width:100%;border:0;background:#fff;padding:22px 34px;display:flex;justify-content:space-between;text-align:left}.accbtn:hover{background:#fafafa}.chev{transition:.22s}.acc.open .chev{transform:rotate(180deg)}.accbody{max-height:0;overflow:hidden;padding:0 34px;transition:max-height .3s,padding .3s}.acc.open .accbody{max-height:700px;padding:0 34px 20px}.control{border-top:1px solid #eee;padding:14px 0;display:flex;justify-content:space-between;gap:18px;align-items:center}.type-menu{position:fixed;z-index:100;background:#fff;border:1px solid #dfe1e5;border-radius:8px;box-shadow:0 8px 28px rgba(60,64,67,.28);width:305px;max-height:72vh;overflow:auto;animation:menu .14s}@keyframes menu{from{opacity:0;transform:translateY(-5px) scale(.98)}to{opacity:1;transform:none}}.type-menu button{width:100%;border:0;background:#fff;text-align:left;padding:13px 16px;display:flex;gap:13px}.type-menu button:hover{background:#f3f6fb}.sep{height:1px;background:#e5e7eb;margin:6px 0}.run{min-height:100vh;padding:20px 12px 60px}.runinner{max-width:760px;margin:auto}.micbar{position:sticky;top:10px;z-index:20;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 15px;display:flex;align-items:center;gap:9px;box-shadow:0 3px 10px rgba(60,64,67,.16);margin-bottom:14px}.micdot{width:12px;height:12px;border-radius:50%;background:#aaa}.micdot.on{background:#d93025;animation:pulse 1.2s infinite}@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(217,48,37,0)}}.ans{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:12px}.ans.current{border-left:6px solid #4285f4;box-shadow:0 2px 8px rgba(60,64,67,.14)}.ans h3{font-size:16px;font-weight:500;margin:0 0 15px}.ans input[type=text],.ans input[type=date],.ans input[type=time],.ans textarea,.ans select{width:100%;border:0;border-bottom:1px solid #9aa0a6;padding:9px 3px;outline:none;background:transparent}.choices{display:grid;gap:10px}.choice{display:flex;align-items:center;gap:9px}.interpret{margin-top:9px;padding:9px 11px;border-radius:8px;background:#f0f7ff;color:#245780;font-size:13px}.thinking{display:flex;align-items:center;gap:5px;color:#666}.thinking b{width:5px;height:5px;border-radius:50%;background:#777;display:inline-block;animation:b .9s infinite}.thinking b:nth-child(2){animation-delay:.12s}.thinking b:nth-child(3){animation-delay:.24s}@keyframes b{50%{transform:translateY(-4px)}}.review{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:12px}.review label{font-weight:700;display:block;margin-bottom:7px}.review input,.review textarea{width:100%;border:0;border-bottom:1px solid var(--line);padding:8px 2px}.scale{display:flex;gap:13px;flex-wrap:wrap}.scale label{display:flex;flex-direction:column;align-items:center;gap:5px}.gridtable{width:100%;border-collapse:collapse;font-size:13px}.gridtable th,.gridtable td{border:1px solid #eee;padding:8px;text-align:center}@media(max-width:700px){.qtop,.airow{grid-template-columns:1fr}.qbody{padding:8px 13px 16px}.setrow,.accbtn{padding-left:18px;padding-right:18px}.accbody,.acc.open .accbody{padding-left:18px;padding-right:18px}}
 
-.voice-create-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.voice-status{margin-top:9px;min-height:18px;color:var(--muted);font-size:13px}.voice-status.listening{color:#b3261e}.voice-status.thinking{color:#4b46b8}.voice-picked{animation:voicePick .75s ease;background:#eef6ff;border-radius:8px;padding:5px 8px;margin-left:-8px;width:fit-content}@keyframes voicePick{0%{transform:scale(.97);box-shadow:0 0 0 0 rgba(66,133,244,.35)}55%{transform:scale(1.02);box-shadow:0 0 0 10px rgba(66,133,244,0)}100%{transform:none}}.review-warn{border-left:5px solid #f9ab00!important}.review-note{margin:7px 0 0;padding:8px 10px;border-radius:7px;background:#fff7e0;color:#8a5a00;font-size:12px}.micbar .phase{margin-left:auto;display:flex;align-items:center;gap:6px}.phase-dot{width:6px;height:6px;border-radius:50%;background:#9aa0a6}.phase-dot.active{background:#5b4ee8;animation:phasePulse 1s infinite}@keyframes phasePulse{50%{opacity:.35}}.answer-ready{animation:ready .7s ease}@keyframes ready{0%{box-shadow:0 0 0 0 rgba(52,168,83,.35)}100%{box-shadow:0 0 0 14px rgba(52,168,83,0)}}
+.voice-create-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.voice-status{margin-top:9px;min-height:18px;color:var(--muted);font-size:13px}.voice-status.listening{color:#b3261e}.voice-status.thinking{color:#4b46b8}.voice-picked{animation:voicePick .75s ease;background:#eef6ff;border-radius:8px;padding:5px 8px;margin-left:-8px;width:fit-content}@keyframes voicePick{0%{transform:scale(.97);box-shadow:0 0 0 0 rgba(66,133,244,.35)}55%{transform:scale(1.02);box-shadow:0 0 0 10px rgba(66,133,244,0)}100%{transform:none}}.review-warn{border-left:5px solid #f9ab00!important}.review-note{margin:7px 0 0;padding:8px 10px;border-radius:7px;background:#fff7e0;color:#8a5a00;font-size:12px}.micbar .phase{margin-left:auto;display:flex;align-items:center;gap:6px}.phase-dot{width:6px;height:6px;border-radius:50%;background:#9aa0a6}.phase-dot.active{background:#5b4ee8;animation:phasePulse 1s infinite}@keyframes phasePulse{50%{opacity:.35}}.answer-ready{animation:ready .7s ease}.ans.current.voice-confirmed{box-shadow:0 0 0 3px rgba(52,168,83,.16),0 2px 8px rgba(60,64,67,.14)}@keyframes ready{0%{box-shadow:0 0 0 0 rgba(52,168,83,.35)}100%{box-shadow:0 0 0 14px rgba(52,168,83,0)}}
 
 </style></head><body>
 <div id="builder"><header class="bar"><div class="brand"><div class="logo">🎙</div>Encuestas con Voz</div><div><button class="ghost btn" id="preview">Vista previa</button> <button class="primary btn" id="respond">Responder</button></div></header><nav class="tabs"><button class="tab active" data-tab="q">Preguntas</button><button class="tab" data-tab="r">Respuestas</button><button class="tab" data-tab="s">Configuración</button></nav><main>
@@ -71,46 +71,200 @@ function bindRun(){
 function focusCard(){$$('[data-cardrun]').forEach((c,i)=>c.classList.toggle('current',i===state.run.current));$(`[data-cardrun="${state.run.current}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});resetVoiceBuffer()}
 function resetVoiceBuffer(){if(!state.run)return;clearTimeout(state.run.silenceTimer);state.run.buffer=[];state.run.interim='';state.run.bufferQid=state.run.qs[state.run.current]?.id||null}
 async function startMic(){
+  /* SpeechRecognition already requests/owns the microphone.
+     Opening getUserMedia at the same time can compete with it in some browsers,
+     so this version deliberately uses only one microphone consumer. */
   if(!state.run)return;
-  try{if(navigator.mediaDevices?.getUserMedia&&!state.run.stream)state.run.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}catch(e){}
+  state.run.keep=true;
   recognize()
 }
 function recognize(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){if($('#mictxt'))$('#mictxt').textContent='Reconocimiento de voz no disponible. Responde manualmente.';return}
-  if(!state.run||state.run.listening)return;const rec=new SR();state.run.rec=rec;rec.lang='es-CO';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
-  rec.onstart=()=>{if(!state.run)return;state.run.listening=true;$('#micdot')?.classList.add('on');setMicPhase('Escuchando','listen')};
-  rec.onresult=e=>{if(!state.run)return;let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const raw=e.results[i][0].transcript.trim();if(!raw)continue;if(e.results[i].isFinal)queueVoicePhrase(raw,true);else interim+=(interim?' ':'')+raw}if(interim)queueVoicePhrase(interim,false)};
-  rec.onerror=e=>{if(!state.run)return;if(['not-allowed','service-not-allowed'].includes(e.error)){state.run.keep=false;if($('#mictxt'))$('#mictxt').textContent='Micrófono bloqueado. Responde manualmente.'}};
-  rec.onend=()=>{if(!state.run)return;state.run.listening=false;$('#micdot')?.classList.remove('on');if(state.run.keep)setTimeout(()=>{if(state.run)recognize()},320)};
-  try{rec.start()}catch(e){}
-}
-function stopMic(){if(!state.run)return;state.run.keep=false;clearTimeout(state.run.silenceTimer);try{state.run.rec?.stop()}catch(e){}state.run.stream?.getTracks()?.forEach(t=>t.stop())}
-function norm(s=''){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s@.+:-]/g,' ').replace(/\s+/g,' ').trim()}
-function setMicPhase(label,phase='listen'){const t=$('#mictxt');if(t)t.textContent=phase==='listen'?'Escuchando en segundo plano':label;const p=$('#phaseText');if(p)p.textContent=label;const d=$('#phaseDot');if(d)d.classList.toggle('active',phase!=='done')}
-function voiceWait(q,isFinal){
-  if(['multiple','dropdown','scale','rating','date','time'].includes(q.type))return isFinal?180:520;
-  if(q.type==='checkbox')return isFinal?300:650;
-  return isFinal?620:950;
-}
-function queueVoicePhrase(raw,isFinal=true){
-  const r=state.run;if(!r||r.processing||Date.now()<r.captureBlockedUntil)return;const q=r.qs[r.current];if(!q)return;const n=norm(raw);if(!n)return;
-  if(r.bufferQid!==q.id){r.buffer=[];r.interim='';r.bufferQid=q.id}
-  if(isFinal){
-    const prev=r.lastByQuestion[q.id],now=Date.now();if(prev&&now-prev.at<4500&&(n===prev.text||sim(n,prev.text)>.93))return;
-    r.lastByQuestion[q.id]={text:n,at:now};
-    if(!r.buffer.some(x=>sim(norm(x),n)>.94))r.buffer.push(raw);
-    r.interim='';
-  }else{
-    r.interim=raw;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    if($('#mictxt'))$('#mictxt').textContent='Reconocimiento de voz no disponible. Responde manualmente.';
+    return
   }
-  clearTimeout(r.silenceTimer);setMicPhase('Escuchando','listen');r.silenceTimer=setTimeout(processVoiceBuffer,voiceWait(q,isFinal))
+  if(!state.run||state.run.listening)return;
+
+  const rec=new SR();
+  state.run.rec=rec;
+  rec.lang='es-CO';
+  rec.continuous=true;
+  rec.interimResults=true;
+  rec.maxAlternatives=1;
+
+  rec.onstart=()=>{
+    if(!state.run)return;
+    state.run.listening=true;
+    $('#micdot')?.classList.add('on');
+    setMicPhase('Escuchando','listen')
+  };
+
+  rec.onresult=e=>{
+    if(!state.run||state.run.processing)return;
+
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const result=e.results[i];
+      const raw=result[0]?.transcript?.trim();
+      if(!raw)continue;
+
+      /* Final speech is always handled immediately.
+         Interim speech is used only when a closed-answer question is already
+         unambiguous, so we do not wait for Chrome to close the phrase. */
+      if(result.isFinal){
+        commitVoicePhrase(raw,true)
+      }else{
+        tryFastInterim(raw)
+      }
+    }
+  };
+
+  rec.onerror=e=>{
+    if(!state.run)return;
+    if(['not-allowed','service-not-allowed'].includes(e.error)){
+      state.run.keep=false;
+      if($('#mictxt'))$('#mictxt').textContent='Micrófono bloqueado. Responde manualmente.'
+    }else if(e.error!=='aborted'&&e.error!=='no-speech'){
+      if($('#mictxt'))$('#mictxt').textContent='Reconectando micrófono…'
+    }
+  };
+
+  rec.onend=()=>{
+    if(!state.run)return;
+    state.run.listening=false;
+    $('#micdot')?.classList.remove('on');
+    if(state.run.keep){
+      setTimeout(()=>{if(state.run&&state.run.keep)recognize()},180)
+    }
+  };
+
+  try{rec.start()}catch(e){
+    setTimeout(()=>{if(state.run&&state.run.keep)recognize()},300)
+  }
 }
-function processVoiceBuffer(){
-  const r=state.run;if(!r||r.processing)return;const q=r.qs[r.current];if(!q)return;
-  const raw=[r.buffer.join(' ').trim(),r.interim.trim()].filter(Boolean).join(' ').trim();if(!raw)return;
-  r.buffer=[];r.interim='';r.processing=true;setMicPhase('Interpretando…','think');if($('#mictxt'))$('#mictxt').innerHTML='<span class="thinking">Interpretando respuesta <b></b><b></b><b></b></span>';
-  setTimeout(()=>{if(!state.run)return;const z=interpret(raw,q);if(z.ok){r.answers[q.id]=z.v;if(z.review)r.reviewFlags[q.id]=z.msg||'Conviene revisar esta respuesta.';else delete r.reviewFlags[q.id];apply(q,z.v);showInt(q,z.msg||'Respuesta identificada.');r.captureBlockedUntil=Date.now()+320;setMicPhase(z.review?'Respuesta para revisar':'Respuesta identificada','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},380)}else{r.reviewFlags[q.id]=z.msg||'No pude determinar esta respuesta.';showInt(q,z.msg||'No pude determinar esta respuesta. La revisaremos al final.');r.captureBlockedUntil=Date.now()+280;setMicPhase('Respuesta para revisar','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},430)}r.processing=false},120)
+function stopMic(){
+  if(!state.run)return;
+  state.run.keep=false;
+  clearTimeout(state.run.silenceTimer);
+  try{state.run.rec?.abort()}catch(e){}
+  state.run.listening=false
 }
+function norm(s=''){
+  return String(s||'').toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\w\s@.+:-]/g,' ')
+    .replace(/\s+/g,' ').trim()
+}
+function setMicPhase(label,phase='listen'){
+  const t=$('#mictxt');
+  if(t)t.textContent=phase==='listen'?'Escuchando en segundo plano':label;
+  const p=$('#phaseText');if(p)p.textContent=label;
+  const d=$('#phaseDot');if(d)d.classList.toggle('active',phase!=='done')
+}
+function isClosedVoiceType(q){
+  return ['multiple','dropdown','checkbox','scale','rating','date','time'].includes(q.type)
+}
+function tryFastInterim(raw){
+  const r=state.run;
+  if(!r||r.processing||Date.now()<r.captureBlockedUntil)return;
+  const q=r.qs[r.current];if(!q||!isClosedVoiceType(q))return;
+
+  const n=norm(raw);
+  if(!n||n.length<2)return;
+
+  const z=interpret(raw,q);
+  /* Only commit interim speech when confidence is very high.
+     Otherwise wait for the final recognition result. */
+  if(z.ok && !z.review && (z.confidence??0)>=.90){
+    commitInterpreted(q,z,raw,'interim')
+  }
+}
+function commitVoicePhrase(raw,isFinal=true){
+  const r=state.run;
+  if(!r||r.processing||Date.now()<r.captureBlockedUntil)return;
+
+  const q=r.qs[r.current];
+  if(!q)return;
+
+  const n=norm(raw);
+  if(!n)return;
+
+  /* Chrome may emit the same final recognition more than once.
+     This blocks exact/nearly-exact repeats without suppressing new answers. */
+  const now=Date.now();
+  const prev=r.lastByQuestion[q.id];
+  if(prev && now-prev.at<7000 && (n===prev.text || sim(n,prev.text)>.95))return;
+  r.lastByQuestion[q.id]={text:n,at:now};
+
+  r.processing=true;
+  setMicPhase('Interpretando…','think');
+  if($('#mictxt'))$('#mictxt').innerHTML='<span class="thinking">Interpretando respuesta <b></b><b></b><b></b></span>';
+
+  /* No artificial long wait: interpret on the next animation frame so the
+     "Interpretando" state is visible but the response feels immediate. */
+  requestAnimationFrame(()=>{
+    if(!state.run)return;
+    const z=interpret(raw,q);
+    commitInterpreted(q,z,raw,'final')
+  })
+}
+function commitInterpreted(q,z,raw,source){
+  const r=state.run;
+  if(!r)return;
+
+  if(z.ok){
+    r.answers[q.id]=z.v;
+    if(z.review)r.reviewFlags[q.id]=z.msg||'Conviene revisar esta respuesta.';
+    else delete r.reviewFlags[q.id];
+
+    apply(q,z.v);
+    showInt(q,z.msg||'Respuesta identificada.');
+    setMicPhase(z.review?'Respuesta para revisar':'Respuesta identificada','done');
+
+    /* Do not let the tail end of the same utterance land in the next question. */
+    r.captureBlockedUntil=Date.now()+850;
+
+    const currentQid=q.id;
+    if(r.current<r.qs.length-1){
+      setTimeout(()=>{
+        if(!state.run)return;
+        const stillIndex=r.qs.findIndex(x=>x.id===currentQid);
+        if(stillIndex===r.current){
+          r.current++;
+          focusCard();
+          setMicPhase('Escuchando','listen')
+        }
+        r.processing=false
+      },620)
+    }else{
+      r.processing=false;
+      setTimeout(()=>setMicPhase('Escuchando','listen'),450)
+    }
+  }else{
+    /* A failed interpretation must not make the app appear frozen.
+       Keep the same question active and continue listening so the user
+       can simply repeat/rephrase it. */
+    r.reviewFlags[q.id]=z.msg||'No pude determinar esta respuesta.';
+    showInt(q,(z.msg||'No pude determinar esta respuesta.')+' Puedes repetirla.');
+    setMicPhase('No entendí; sigo escuchando','listen');
+    r.captureBlockedUntil=Date.now()+250;
+    r.processing=false
+  }
+}
+/* Kept for compatibility with older event paths; now processing is immediate. */
+function resetVoiceBuffer(){
+  if(!state.run)return;
+  clearTimeout(state.run.silenceTimer);
+  state.run.buffer=[];
+  state.run.interim='';
+  state.run.bufferQid=state.run.qs[state.run.current]?.id||null
+}
+function voiceWait(){return 0}
+function queueVoicePhrase(raw,isFinal=true){
+  if(isFinal)commitVoicePhrase(raw,true);
+  else tryFastInterim(raw)
+}
+function processVoiceBuffer(){}
 function sim(a,b){if(!a||!b)return 0;if(a===b)return 1;if(a.includes(b)||b.includes(a))return .94;const A=new Set(a.split(' ').filter(x=>x.length>1)),B=new Set(b.split(' ').filter(x=>x.length>1));const inter=[...A].filter(x=>B.has(x)).length,union=new Set([...A,...B]).size;const j=union?inter/union:0;return j}
 function aliasScore(n,words){let s=0;for(const w of words){const x=norm(w);if(n.includes(x))s=Math.max(s,x.includes(' ')?0.93:0.82)}return s}
 function semanticChoice(n,q){
