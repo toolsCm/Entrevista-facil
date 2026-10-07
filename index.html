@@ -1,644 +1,649 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iglecrecimiento - Registro por voz</title>
-  <style>
-    :root{
-      --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#667085;
-      --primary:#2854c5; --primary-dark:#1e3f96; --border:#e4e7ec;
-      --soft:#f8faff; --ok:#159455; --danger:#c92a2a;
-      --shadow:0 18px 45px rgba(20,30,55,.10);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; min-height:100vh; color:var(--text);
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:linear-gradient(180deg,#edf3ff 0%,#f7f8fb 40%,#fff 100%);
-    }
-    .wrap{width:min(1060px,calc(100% - 28px));margin:auto;padding:28px 0 64px}
-    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-    h1{margin:0;font-size:clamp(28px,4vw,42px);letter-spacing:-.04em}
-    .badge{padding:8px 12px;border:1px solid #cbd8ff;background:#eaf0ff;color:#24469f;border-radius:999px;font-weight:800;font-size:13px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);padding:clamp(18px,3vw,30px)}
-    .hero{display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
-    h2{margin:0 0 8px;font-size:clamp(22px,3vw,30px)}
-    p{color:var(--muted);line-height:1.6}
-    .actions,.toolbar{display:flex;gap:10px;flex-wrap:wrap}
-    .actions{justify-content:flex-end}
-    button{
-      border:0;border-radius:14px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;
-      transition:.2s ease;
-    }
-    button:hover{transform:translateY(-1px)}
-    button:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    .primary{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(40,84,197,.22)}
-    .secondary{background:#eef2f7;color:#243043;border:1px solid #dce3ec}
-    .danger{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9}
-    .hidden{display:none!important}
-    .session{margin-top:20px;display:grid;grid-template-columns:.82fr 1.18fr;gap:18px}
-    .panel{border:1px solid var(--border);border-radius:20px;background:var(--soft);padding:20px}
-    .panel h3{margin:0 0 12px}
-    .questions{display:grid;gap:9px}
-    .q{
-      display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:start;
-      padding:10px 11px;border-radius:12px;background:#fff;border:1px solid #e8ecf3;
-      color:#344054;font-size:14px;
-    }
-    .num{
-      width:25px;height:25px;border-radius:8px;background:#e9efff;color:#24469f;
-      display:grid;place-items:center;font-weight:900;font-size:12px
-    }
-    .micline{
-      display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;
-      background:#fff;border:1px solid #dce4ef;margin-bottom:12px
-    }
-    .dot{width:12px;height:12px;border-radius:50%;background:#c6ccd5;flex:0 0 auto}
-    .dot.on{background:#ef4444;box-shadow:0 0 0 7px rgba(239,68,68,.12);animation:pulse 1s infinite}
-    @keyframes pulse{50%{transform:scale(1.15)}}
-    .transcript{
-      width:100%;min-height:310px;max-height:430px;overflow:auto;white-space:pre-wrap;
-      padding:16px;border-radius:16px;border:1px solid #dce4ef;background:#fff;
-      color:#26334a;line-height:1.65;font-size:16px
-    }
-    .hint{font-size:13px;color:var(--muted);margin-top:10px}
-    .review{margin-top:20px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .field{display:grid;gap:6px}
-    .field.full{grid-column:1/-1}
-    label{font-size:13px;font-weight:800;color:#344054}
-    input,textarea,select{
-      width:100%;border:1px solid #d6dbe4;border-radius:12px;padding:12px 13px;
-      font:inherit;color:var(--text);background:#fff;outline:none
-    }
-    input:focus,textarea:focus,select:focus{border-color:#8eabff;box-shadow:0 0 0 3px rgba(40,84,197,.08)}
-    textarea{min-height:90px;resize:vertical}
-    .config{margin-top:18px;padding:15px;border-radius:16px;border:1px solid #dbe4f0;background:#fbfcff}
-    .config .hint{margin-top:7px}
-    dialog{
-      width:min(1160px,calc(100% - 24px));max-height:88vh;border:0;border-radius:22px;padding:0;
-      box-shadow:0 30px 80px rgba(0,0,0,.24)
-    }
-    dialog::backdrop{background:rgba(15,23,42,.55)}
-    .modal-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);padding:18px 20px;display:flex;justify-content:space-between;align-items:center;z-index:2}
-    .modal-body{padding:18px 20px 24px;overflow:auto}
-    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:14px}
-    table{width:100%;border-collapse:collapse;min-width:1100px}
-    th,td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;text-align:left}
-    th{background:#f8fafc}
-    .toast{position:fixed;right:18px;bottom:18px;width:min(390px,calc(100% - 36px));padding:14px 16px;border-radius:14px;background:#111827;color:#fff;box-shadow:0 16px 32px rgba(0,0,0,.25);z-index:50}
-    @media(max-width:800px){
-      .hero,.session,.grid{grid-template-columns:1fr}
-      .actions{justify-content:flex-start}
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Encuestas con Voz</title>
+<style>
+  :root{
+    --bg:#f4f6f9;
+    --panel:#ffffff;
+    --text:#1c2430;
+    --muted:#6c7684;
+    --line:#e6e9ef;
+    --primary:#4f46e5;
+    --primary-2:#4338ca;
+    --danger:#c62828;
+    --shadow:0 12px 30px rgba(22,34,51,.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+  button,input,textarea,select{font:inherit}
+  button{cursor:pointer}
+  .app{min-height:100vh}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .brand-badge{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;display:grid;place-items:center;font-size:19px}
+  .nav{display:flex;gap:8px;flex-wrap:wrap}
+  .nav button,.ghost{border:1px solid var(--line);background:#fff;color:var(--text);padding:10px 14px;border-radius:12px}
+  .nav button.active{background:var(--text);color:#fff;border-color:var(--text)}
+  main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
+  .hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:22px}
+  .hero h1{margin:0 0 6px;font-size:clamp(28px,4vw,44px);line-height:1.05}
+  .hero p{margin:0;color:var(--muted);max-width:700px}
+  .btn{border:0;border-radius:13px;padding:11px 16px;background:var(--primary);color:white;font-weight:700;box-shadow:0 8px 20px rgba(79,70,229,.18)}
+  .btn:hover{background:var(--primary-2)}
+  .btn.secondary{background:#111827}
+  .btn.soft{background:#eef2ff;color:#3730a3;box-shadow:none}
+  .btn.danger{background:#fee2e2;color:#991b1b;box-shadow:none}
+  .grid{display:grid;gap:16px}
+  .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 8px}
+  .card p{margin:0;color:var(--muted)}
+  .stat{font-size:30px;font-weight:800;margin-top:8px}
+  .survey-card{position:relative;overflow:hidden}
+  .survey-strip{position:absolute;left:0;right:0;top:0;height:6px;background:var(--accent,var(--primary))}
+  .survey-meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .chip{font-size:12px;padding:5px 9px;border-radius:999px;background:#f2f4f7;color:#4b5563}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .section-title{margin:26px 0 12px;font-size:20px}
+  .form{display:grid;gap:16px}
+  .field{display:grid;gap:7px}
+  .field label{font-weight:700}
+  .field small{color:var(--muted)}
+  input[type="text"],input[type="email"],input[type="tel"],textarea,select{
+    width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;color:var(--text);outline:none
+  }
+  input:focus,textarea:focus,select:focus{border-color:#a5b4fc;box-shadow:0 0 0 4px #eef2ff}
+  textarea{min-height:105px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .radio-row{display:flex;gap:10px;flex-wrap:wrap}
+  .option-pill{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+  .option-pill input{margin-right:6px}
+  .preview-wrap{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:white;box-shadow:var(--shadow)}
+  .preview-banner{height:165px;background:linear-gradient(135deg,var(--accent,var(--primary)),#c4b5fd);background-size:cover;background-position:center}
+  .preview-body{padding:24px;background:var(--survey-bg,#ffffff)}
+  .preview-body h2{margin:0 0 8px}
+  .q-list{display:grid;gap:12px;margin-top:18px}
+  .q-item{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px}
+  .q-head{display:flex;gap:10px;align-items:flex-start}
+  .q-num{min-width:26px;height:26px;border-radius:8px;background:#f3f4f6;display:grid;place-items:center;font-weight:800;font-size:12px}
+  .q-content{flex:1}
+  .q-content strong{display:block;margin-bottom:4px}
+  .q-content span{color:var(--muted);font-size:13px}
+  .q-actions{display:flex;gap:6px}
+  .icon-btn{border:1px solid var(--line);background:white;border-radius:9px;padding:7px 9px}
+  .wizard{max-width:760px;margin:0 auto}
+  .progress{height:8px;background:#eceff3;border-radius:999px;overflow:hidden;margin:14px 0 24px}
+  .progress > div{height:100%;background:var(--primary);transition:.25s}
+  .question-screen{background:white;border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:var(--shadow)}
+  .question-screen h2{font-size:clamp(24px,4vw,34px);margin:8px 0 18px}
+  .answer-area{min-height:110px}
+  .mic{width:74px;height:74px;border-radius:50%;border:0;background:var(--primary);color:#fff;font-size:28px;display:grid;place-items:center;margin:18px auto 8px;box-shadow:0 12px 30px rgba(79,70,229,.24)}
+  .mic.listening{animation:pulse 1.3s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.35)}70%{box-shadow:0 0 0 18px rgba(79,70,229,0)}100%{box-shadow:0 0 0 0 rgba(79,70,229,0)}}
+  .mic-note{text-align:center;color:var(--muted);font-size:13px}
+  .footer-actions{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .review-grid{display:grid;gap:12px}
+  .review-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+  .review-item label{font-weight:800;display:block;margin-bottom:7px}
+  .empty{text-align:center;padding:50px 18px;color:var(--muted)}
+  .notice{padding:12px 14px;border-radius:12px;background:#eef6ff;color:#214c7c;border:1px solid #dbeafe}
+  .success{padding:12px 14px;border-radius:12px;background:#ecfdf3;color:#166534;border:1px solid #bbf7d0}
+  .warning{padding:12px 14px;border-radius:12px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+  .hide{display:none!important}
+  .banner-upload{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .color-input{width:54px;height:42px;border:1px solid var(--line);padding:3px;border-radius:10px;background:#fff}
+  .mini{font-size:12px;color:var(--muted)}
+  @media(max-width:720px){
+    .topbar{align-items:flex-start;gap:10px;flex-direction:column}
+    .row{grid-template-columns:1fr}
+    .hero{align-items:flex-start;flex-direction:column}
+    .question-screen{padding:20px}
+  }
+</style>
 </head>
 <body>
-<main class="wrap">
-  <div class="top">
-    <h1>Iglecrecimiento</h1>
-    <span class="badge">Registro continuo por voz</span>
-  </div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-badge">🎙️</div><span>Encuestas con Voz</span></div>
+    <nav class="nav">
+      <button data-view="home" class="active">Inicio</button>
+      <button data-view="create">Crear encuesta</button>
+      <button data-view="surveys">Mis encuestas</button>
+      <button data-view="responses">Respuestas</button>
+    </nav>
+  </header>
 
-  <section class="card">
-    <div class="hero">
-      <div>
-        <h2>Registro sencillo, sin interrupciones</h2>
-        <p>
-          La página no lee las preguntas. Al comenzar, activa el micrófono y deja hablar a la persona
-          con tranquilidad. Al final organiza la información y permite revisar todo antes de guardarlo.
-        </p>
-      </div>
-      <div class="actions">
-        <button class="primary" id="startBtn">🎙️ Comenzar</button>
-        <button class="secondary" id="recordsBtn">👥 Ver registros</button>
-      </div>
-    </div>
-
-    <section class="session hidden" id="session">
-      <div class="panel">
-        <h3>Información que necesitamos</h3>
-        <div class="questions">
-          <div class="q"><span class="num">1</span><span>Nombre completo</span></div>
-          <div class="q"><span class="num">2</span><span>Número de celular / WhatsApp</span></div>
-          <div class="q"><span class="num">3</span><span>Correo electrónico (opcional)</span></div>
-          <div class="q"><span class="num">4</span><span>Ciudad o municipio de donde viene</span></div>
-          <div class="q"><span class="num">5</span><span>Si es su primera vez en Iglecrecimiento</span></div>
-          <div class="q"><span class="num">6</span><span>Si actualmente asiste a una iglesia</span></div>
-          <div class="q"><span class="num">7</span><span>Cómo se enteró de Iglecrecimiento</span></div>
-          <div class="q"><span class="num">8</span><span>Si desea recibir información de próximos eventos</span></div>
-          <div class="q"><span class="num">9</span><span>Petición de acompañamiento u oración (opcional)</span></div>
-        </div>
-        <p class="hint">
-          Puede responder siguiendo este orden, como si estuviera conversando. No hace falta esperar entre una respuesta y otra.
-        </p>
-      </div>
-
-      <div class="panel">
-        <div class="micline">
-          <span class="dot" id="micDot"></span>
-          <strong id="micStatus">Preparando micrófono…</strong>
-        </div>
-
-        <div class="transcript" id="transcript">Aquí aparecerá lo que la persona vaya diciendo…</div>
-
-        <div class="toolbar" style="margin-top:14px">
-          <button class="primary" id="finishBtn">✅ Terminé de responder</button>
-          <button class="secondary" id="pauseBtn">⏸️ Pausar</button>
-          <button class="danger" id="cancelBtn">Cancelar</button>
-        </div>
-        <p class="hint">
-          El reconocimiento continúa aunque haya pequeñas pausas. Al presionar “Terminé de responder”, se organizan los datos para revisión.
-        </p>
-      </div>
-    </section>
-
-    <section class="review hidden" id="review">
-      <div class="panel">
-        <h2>Revisa antes de guardar</h2>
-        <p>La aplicación intentó identificar cada respuesta. Corrige cualquier dato que no haya quedado bien.</p>
-
-        <div class="grid">
-          <div class="field">
-            <label for="nombre">Nombre completo</label>
-            <input id="nombre">
-          </div>
-          <div class="field">
-            <label for="whatsapp">WhatsApp</label>
-            <input id="whatsapp">
-          </div>
-          <div class="field">
-            <label for="correo">Correo electrónico</label>
-            <input id="correo">
-          </div>
-          <div class="field">
-            <label for="ciudad">Ciudad / municipio</label>
-            <input id="ciudad">
-          </div>
-          <div class="field">
-            <label for="primeraVez">¿Primera vez?</label>
-            <select id="primeraVez">
-              <option value="">Sin identificar</option>
-              <option>Sí</option><option>No</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="iglesia">¿Asiste a una iglesia?</label>
-            <select id="iglesia">
-              <option value="">Sin identificar</option>
-              <option>Sí</option><option>No</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="comoSeEntero">¿Cómo se enteró?</label>
-            <input id="comoSeEntero">
-          </div>
-          <div class="field">
-            <label for="autorizaContacto">¿Desea recibir información?</label>
-            <select id="autorizaContacto">
-              <option value="">Sin identificar</option>
-              <option>Sí</option><option>No</option>
-            </select>
-          </div>
-          <div class="field full">
-            <label for="peticion">Petición / acompañamiento / oración</label>
-            <textarea id="peticion"></textarea>
-          </div>
-          <div class="field full">
-            <label for="textoCompleto">Transcripción completa</label>
-            <textarea id="textoCompleto" style="min-height:140px"></textarea>
-          </div>
-        </div>
-
-        <div class="toolbar" style="margin-top:16px">
-          <button class="primary" id="saveBtn">💾 Guardar registro</button>
-          <button class="secondary" id="backBtn">🎙️ Volver a escuchar</button>
-          <button class="danger" id="discardBtn">Descartar</button>
-        </div>
-      </div>
-    </section>
-
-    <div class="config">
-      <label for="sheetUrl">Google Sheets / Apps Script Web App URL (opcional)</label>
-      <input id="sheetUrl" placeholder="https://script.google.com/macros/s/XXXXX/exec">
-      <div class="hint">
-        Sin esta conexión, los registros se guardan localmente en este navegador y pueden exportarse a CSV.
-      </div>
-    </div>
-  </section>
-</main>
-
-<dialog id="recordsDialog">
-  <div class="modal-head">
-    <div>
-      <strong style="font-size:20px">Registros guardados</strong>
-      <div class="hint" id="recordCount"></div>
-    </div>
-    <button class="secondary" id="closeRecordsBtn">Cerrar</button>
-  </div>
-  <div class="modal-body">
-    <div class="toolbar" style="margin:0 0 14px">
-      <button class="secondary" id="exportBtn">⬇️ Exportar CSV</button>
-      <button class="danger" id="clearBtn">🗑️ Borrar registros locales</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th><th>Nombre</th><th>WhatsApp</th><th>Correo</th><th>Ciudad</th>
-            <th>Primera vez</th><th>Asiste a iglesia</th><th>Cómo se enteró</th>
-            <th>Autoriza contacto</th><th>Petición</th>
-          </tr>
-        </thead>
-        <tbody id="recordsBody"></tbody>
-      </table>
-    </div>
-  </div>
-</dialog>
-
-<div class="toast hidden" id="toast"></div>
+  <main id="app"></main>
+</div>
 
 <script>
-(() => {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const $ = id => document.getElementById(id);
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-  const startBtn=$("startBtn"), recordsBtn=$("recordsBtn"), session=$("session"), review=$("review");
-  const micDot=$("micDot"), micStatus=$("micStatus"), transcriptBox=$("transcript");
-  const finishBtn=$("finishBtn"), pauseBtn=$("pauseBtn"), cancelBtn=$("cancelBtn");
-  const saveBtn=$("saveBtn"), backBtn=$("backBtn"), discardBtn=$("discardBtn");
-  const sheetUrl=$("sheetUrl"), toast=$("toast");
-  const recordsDialog=$("recordsDialog"), recordsBody=$("recordsBody"), recordCount=$("recordCount");
-  const closeRecordsBtn=$("closeRecordsBtn"), exportBtn=$("exportBtn"), clearBtn=$("clearBtn");
+const state = {
+  view:'home',
+  editingId:null,
+  currentSurvey:null,
+  runIndex:0,
+  answers:[],
+  recognition:null,
+  tempBanner:null
+};
 
-  let recognition=null, isListening=false, keepListening=false, paused=false;
-  let finalText="", interimText="", restartTimer=null;
+const store = {
+  get surveys(){ return JSON.parse(localStorage.getItem('ev_surveys') || '[]') },
+  set surveys(v){ localStorage.setItem('ev_surveys', JSON.stringify(v)) },
+  get responses(){ return JSON.parse(localStorage.getItem('ev_responses') || '[]') },
+  set responses(v){ localStorage.setItem('ev_responses', JSON.stringify(v)) }
+};
 
-  sheetUrl.value = localStorage.getItem("igle_sheet_url") || "";
-  sheetUrl.addEventListener("change",()=>localStorage.setItem("igle_sheet_url",sheetUrl.value.trim()));
+function escapeHtml(str=''){
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
 
-  function showToast(msg, ms=3000){
-    toast.textContent=msg; toast.classList.remove("hidden");
-    clearTimeout(toast._t); toast._t=setTimeout(()=>toast.classList.add("hidden"),ms);
+function setView(v){
+  state.view=v;
+  state.editingId=null;
+  $$('.nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+
+function render(){
+  const root=$('#app');
+  if(state.view==='home') root.innerHTML=homeView();
+  if(state.view==='create') { root.innerHTML=createView(); bindCreate(); }
+  if(state.view==='surveys') { root.innerHTML=surveysView(); bindSurveys(); }
+  if(state.view==='responses') root.innerHTML=responsesView();
+  if(state.view==='run') { root.innerHTML=runView(); bindRun(); }
+  if(state.view==='review') { root.innerHTML=reviewView(); bindReview(); }
+  if(state.view==='done') root.innerHTML=doneView();
+}
+
+function homeView(){
+  const s=store.surveys, r=store.responses;
+  return `
+  <section class="hero">
+    <div>
+      <h1>Crea encuestas que se responden hablando.</h1>
+      <p>Diseña, personaliza y prueba encuestas de voz sin conectar servicios externos. En esta versión todo se guarda localmente en este navegador.</p>
+    </div>
+    <button class="btn" onclick="setView('create')">Crear encuesta</button>
+  </section>
+  <div class="notice">Prototipo local: todavía no usa Google Sheets ni cuentas. El micrófono se solicita únicamente cuando una persona decide responder por voz.</div>
+  <h2 class="section-title">Resumen</h2>
+  <div class="grid cards">
+    <div class="card"><p>Encuestas creadas</p><div class="stat">${s.length}</div></div>
+    <div class="card"><p>Respuestas guardadas</p><div class="stat">${r.length}</div></div>
+    <div class="card"><p>Almacenamiento</p><div class="stat" style="font-size:21px">Este dispositivo</div><p>localStorage</p></div>
+  </div>
+  <h2 class="section-title">Cómo funciona</h2>
+  <div class="grid cards">
+    <div class="card"><h3>1. Describe</h3><p>Escribe el objetivo de la encuesta y elige si será corta o larga.</p></div>
+    <div class="card"><h3>2. Ajusta</h3><p>Edita preguntas, cambia colores y agrega un banner.</p></div>
+    <div class="card"><h3>3. Responde</h3><p>La persona ve cada pregunta y responde por voz o escribiendo.</p></div>
+    <div class="card"><h3>4. Revisa</h3><p>Al final se ve la encuesta diligenciada, no una transcripción continua.</p></div>
+  </div>`;
+}
+
+function defaultQuestions(desc, length){
+  const d=(desc||'').toLowerCase();
+  const qs=[];
+  if(/evento|congreso|encuentro|iglesia|asistente/.test(d)){
+    qs.push(
+      {text:'¿Cuál es tu nombre completo?',type:'text',required:true},
+      {text:'¿De qué ciudad o municipio vienes?',type:'text',required:true},
+      {text:'¿Es la primera vez que participas en este evento?',type:'yesno',required:true},
+      {text:'¿Cómo te enteraste de este evento?',type:'text',required:true},
+      {text:'¿Qué esperas encontrar o aprender aquí?',type:'long',required:false}
+    );
+    if(length==='long') qs.push(
+      {text:'¿Qué tema te interesa especialmente?',type:'long',required:false},
+      {text:'¿Qué podríamos hacer para mejorar tu experiencia?',type:'long',required:false},
+      {text:'¿Te gustaría recibir información de próximos eventos?',type:'yesno',required:true}
+    );
+  }else if(/cliente|servicio|satisfacción|satisfaccion|producto/.test(d)){
+    qs.push(
+      {text:'¿Cuál es tu nombre?',type:'text',required:false},
+      {text:'¿Cómo calificarías tu experiencia general?',type:'scale',required:true},
+      {text:'¿Qué fue lo que más te gustó?',type:'long',required:false},
+      {text:'¿Qué podríamos mejorar?',type:'long',required:false}
+    );
+    if(length==='long') qs.push(
+      {text:'¿Qué tan fácil fue usar nuestro servicio?',type:'scale',required:true},
+      {text:'¿Recomendarías este servicio a otra persona?',type:'yesno',required:true},
+      {text:'¿Hay algo más que quieras contarnos?',type:'long',required:false}
+    );
+  }else{
+    qs.push(
+      {text:'¿Cuál es tu nombre?',type:'text',required:false},
+      {text:'¿Cuál es tu opinión principal sobre este tema?',type:'long',required:true},
+      {text:'¿Qué aspecto consideras más importante?',type:'long',required:true},
+      {text:'¿Qué mejorarías?',type:'long',required:false}
+    );
+    if(length==='long') qs.push(
+      {text:'¿Qué experiencia previa tienes relacionada con este tema?',type:'long',required:false},
+      {text:'¿Qué resultado te gustaría obtener?',type:'long',required:false},
+      {text:'¿Quieres agregar algún comentario final?',type:'long',required:false}
+    );
+  }
+  return qs;
+}
+
+function createView(){
+  const editing=state.editingId ? store.surveys.find(s=>s.id===state.editingId) : null;
+  const s=editing || {title:'',description:'',prompt:'',length:'short',accent:'#4f46e5',bg:'#ffffff',banner:'',questions:[]};
+  return `
+  <section class="hero">
+    <div><h1>${editing?'Editar encuesta':'Crear encuesta'}</h1><p>Empieza por describir lo que quieres preguntar. Puedes generar una base y luego modificarla.</p></div>
+  </section>
+  <div class="grid" style="grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);align-items:start">
+    <section class="card">
+      <div class="form">
+        <div class="field">
+          <label>Nombre de la encuesta</label>
+          <input id="title" type="text" placeholder="Ej. Encuesta asistentes Iglecrecimiento" value="${escapeHtml(s.title)}">
+        </div>
+        <div class="field">
+          <label>Descripción para la persona que responde</label>
+          <textarea id="description" placeholder="Ej. Queremos conocerte mejor. Tus respuestas nos ayudan a mejorar.">${escapeHtml(s.description)}</textarea>
+        </div>
+        <div class="field">
+          <label>Describe qué encuesta quieres crear</label>
+          <textarea id="prompt" placeholder="Ej. Quiero conocer a las personas nuevas que llegan a un evento, saber de dónde vienen, cómo se enteraron y qué esperan del evento.">${escapeHtml(s.prompt)}</textarea>
+          <small>En este prototipo la generación es local y usa plantillas inteligentes sencillas; luego se puede conectar a IA real.</small>
+        </div>
+        <div class="field">
+          <label>Longitud</label>
+          <div class="radio-row">
+            <label class="option-pill"><input type="radio" name="length" value="short" ${s.length==='short'?'checked':''}> Corta</label>
+            <label class="option-pill"><input type="radio" name="length" value="long" ${s.length==='long'?'checked':''}> Larga</label>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn soft" id="generate">Generar preguntas</button>
+          <button class="ghost" id="addQuestion">+ Agregar pregunta</button>
+        </div>
+        <div id="questionsEditor" class="q-list"></div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h3>Personalización</h3>
+      <div class="form" style="margin-top:14px">
+        <div class="row">
+          <div class="field"><label>Color principal</label><input id="accent" class="color-input" type="color" value="${s.accent}"></div>
+          <div class="field"><label>Fondo</label><input id="bg" class="color-input" type="color" value="${s.bg}"></div>
+        </div>
+        <div class="field">
+          <label>Banner</label>
+          <div class="banner-upload">
+            <input id="banner" type="file" accept="image/*">
+            ${s.banner?'<span class="mini">Banner guardado</span>':''}
+          </div>
+          <small>La imagen se guarda dentro del navegador para este prototipo.</small>
+        </div>
+        <button class="btn secondary" id="saveSurvey">Guardar encuesta</button>
+      </div>
+      <div id="miniPreview" style="margin-top:18px"></div>
+    </aside>
+  </div>`;
+}
+
+let editingQuestions=[];
+
+function bindCreate(){
+  const existing=state.editingId ? store.surveys.find(s=>s.id===state.editingId) : null;
+  editingQuestions=(existing?.questions || []).map(q=>({...q}));
+  state.tempBanner=existing?.banner || '';
+  renderQuestionsEditor();
+  updateMiniPreview();
+
+  $('#generate').onclick=()=>{
+    const prompt=$('#prompt').value.trim();
+    const length=$('input[name="length"]:checked').value;
+    editingQuestions=defaultQuestions(prompt,length);
+    renderQuestionsEditor();
+    updateMiniPreview();
+  };
+  $('#addQuestion').onclick=()=>{
+    editingQuestions.push({text:'Nueva pregunta',type:'text',required:false});
+    renderQuestionsEditor();
+  };
+  $('#accent').oninput=updateMiniPreview;
+  $('#bg').oninput=updateMiniPreview;
+  $('#title').oninput=updateMiniPreview;
+  $('#description').oninput=updateMiniPreview;
+  $('#banner').onchange=async(e)=>{
+    const f=e.target.files?.[0];
+    if(!f) return;
+    const reader=new FileReader();
+    reader.onload=()=>{state.tempBanner=reader.result;updateMiniPreview()};
+    reader.readAsDataURL(f);
+  };
+  $('#saveSurvey').onclick=saveSurvey;
+}
+
+function renderQuestionsEditor(){
+  const box=$('#questionsEditor');
+  if(!box) return;
+  if(!editingQuestions.length){
+    box.innerHTML='<div class="empty">Todavía no hay preguntas. Describe la encuesta y pulsa “Generar preguntas”.</div>';
+    return;
+  }
+  box.innerHTML=editingQuestions.map((q,i)=>`
+    <div class="q-item">
+      <div class="q-head">
+        <div class="q-num">${i+1}</div>
+        <div class="q-content">
+          <input type="text" value="${escapeHtml(q.text)}" data-qtext="${i}">
+          <div class="row" style="margin-top:8px">
+            <select data-qtype="${i}">
+              <option value="text" ${q.type==='text'?'selected':''}>Respuesta corta</option>
+              <option value="long" ${q.type==='long'?'selected':''}>Respuesta larga</option>
+              <option value="yesno" ${q.type==='yesno'?'selected':''}>Sí / No</option>
+              <option value="scale" ${q.type==='scale'?'selected':''}>Escala 1 a 5</option>
+            </select>
+            <label class="option-pill"><input type="checkbox" data-qreq="${i}" ${q.required?'checked':''}> Obligatoria</label>
+          </div>
+        </div>
+        <div class="q-actions"><button class="icon-btn" data-del="${i}">✕</button></div>
+      </div>
+    </div>`).join('');
+
+  $$('[data-qtext]').forEach(el=>el.oninput=()=>editingQuestions[+el.dataset.qtext].text=el.value);
+  $$('[data-qtype]').forEach(el=>el.onchange=()=>editingQuestions[+el.dataset.qtype].type=el.value);
+  $$('[data-qreq]').forEach(el=>el.onchange=()=>editingQuestions[+el.dataset.qreq].required=el.checked);
+  $$('[data-del]').forEach(el=>el.onclick=()=>{editingQuestions.splice(+el.dataset.del,1);renderQuestionsEditor();updateMiniPreview();});
+}
+
+function updateMiniPreview(){
+  const p=$('#miniPreview'); if(!p) return;
+  const accent=$('#accent')?.value || '#4f46e5';
+  const bg=$('#bg')?.value || '#fff';
+  const title=$('#title')?.value || 'Título de la encuesta';
+  const desc=$('#description')?.value || 'Descripción de la encuesta';
+  const banner=state.tempBanner;
+  p.innerHTML=`
+    <div class="preview-wrap" style="--accent:${accent};--survey-bg:${bg}">
+      <div class="preview-banner" style="${banner?`background-image:url('${banner}')`:''}"></div>
+      <div class="preview-body">
+        <h2>${escapeHtml(title)}</h2>
+        <p>${escapeHtml(desc)}</p>
+        <div class="chip" style="display:inline-block;margin-top:10px">${editingQuestions.length} preguntas</div>
+      </div>
+    </div>`;
+}
+
+function saveSurvey(){
+  const title=$('#title').value.trim();
+  if(!title){alert('Escribe un nombre para la encuesta.');return}
+  if(!editingQuestions.length){alert('Agrega al menos una pregunta.');return}
+  const surveys=store.surveys;
+  const item={
+    id:state.editingId || 's_'+Date.now(),
+    title,
+    description:$('#description').value.trim(),
+    prompt:$('#prompt').value.trim(),
+    length:$('input[name="length"]:checked').value,
+    accent:$('#accent').value,
+    bg:$('#bg').value,
+    banner:state.tempBanner || '',
+    questions:editingQuestions,
+    updatedAt:new Date().toISOString()
+  };
+  const idx=surveys.findIndex(s=>s.id===item.id);
+  if(idx>=0) surveys[idx]=item; else surveys.unshift(item);
+  store.surveys=surveys;
+  state.editingId=null;
+  state.view='surveys';
+  $$('.nav button').forEach(b=>b.classList.toggle('active', b.dataset.view==='surveys'));
+  render();
+}
+
+function surveysView(){
+  const surveys=store.surveys;
+  return `
+  <section class="hero">
+    <div><h1>Mis encuestas</h1><p>Administra y prueba las encuestas guardadas en este navegador.</p></div>
+    <button class="btn" onclick="setView('create')">Nueva encuesta</button>
+  </section>
+  ${surveys.length?`<div class="grid cards">${surveys.map(s=>`
+    <article class="card survey-card" style="--accent:${s.accent}">
+      <div class="survey-strip"></div>
+      <h3>${escapeHtml(s.title)}</h3>
+      <p>${escapeHtml(s.description || 'Sin descripción')}</p>
+      <div class="survey-meta">
+        <span class="chip">${s.questions.length} preguntas</span>
+        <span class="chip">${s.length==='short'?'Corta':'Larga'}</span>
+        <span class="chip">${store.responses.filter(r=>r.surveyId===s.id).length} respuestas</span>
+      </div>
+      <div class="actions">
+        <button class="btn" data-run="${s.id}">Responder</button>
+        <button class="ghost" data-edit="${s.id}">Editar</button>
+        <button class="ghost" data-copy="${s.id}">Duplicar</button>
+        <button class="btn danger" data-delete="${s.id}">Eliminar</button>
+      </div>
+    </article>`).join('')}</div>`:`<div class="empty card">Aún no has creado encuestas.</div>`}`;
+}
+
+function bindSurveys(){
+  $$('[data-run]').forEach(b=>b.onclick=()=>startSurvey(b.dataset.run));
+  $$('[data-edit]').forEach(b=>b.onclick=()=>{
+    state.editingId=b.dataset.edit; state.view='create';
+    $$('.nav button').forEach(x=>x.classList.toggle('active', x.dataset.view==='create'));
+    render();
+  });
+  $$('[data-copy]').forEach(b=>b.onclick=()=>{
+    const surveys=store.surveys;
+    const original=surveys.find(s=>s.id===b.dataset.copy);
+    const copy=JSON.parse(JSON.stringify(original));
+    copy.id='s_'+Date.now(); copy.title+=' (copia)'; copy.updatedAt=new Date().toISOString();
+    surveys.unshift(copy); store.surveys=surveys; render();
+  });
+  $$('[data-delete]').forEach(b=>b.onclick=()=>{
+    if(!confirm('¿Eliminar esta encuesta?')) return;
+    store.surveys=store.surveys.filter(s=>s.id!==b.dataset.delete);
+    render();
+  });
+}
+
+function startSurvey(id){
+  const s=store.surveys.find(x=>x.id===id);
+  if(!s) return;
+  state.currentSurvey=s;
+  state.runIndex=0;
+  state.answers=s.questions.map(()=> '');
+  state.view='run';
+  render();
+}
+
+function answerControl(q,val,i){
+  if(q.type==='yesno') return `
+    <div class="radio-row">
+      <label class="option-pill"><input type="radio" name="ans${i}" value="Sí" ${val==='Sí'?'checked':''}> Sí</label>
+      <label class="option-pill"><input type="radio" name="ans${i}" value="No" ${val==='No'?'checked':''}> No</label>
+    </div>`;
+  if(q.type==='scale') return `
+    <div class="radio-row">${[1,2,3,4,5].map(n=>`<label class="option-pill"><input type="radio" name="ans${i}" value="${n}" ${String(val)===String(n)?'checked':''}> ${n}</label>`).join('')}</div>`;
+  if(q.type==='long') return `<textarea id="answerInput" class="answer-area" placeholder="Puedes hablar o escribir aquí.">${escapeHtml(val)}</textarea>`;
+  return `<input id="answerInput" type="text" value="${escapeHtml(val)}" placeholder="Puedes hablar o escribir aquí.">`;
+}
+
+function runView(){
+  const s=state.currentSurvey, i=state.runIndex, q=s.questions[i], val=state.answers[i] || '';
+  const progress=((i)/s.questions.length)*100;
+  return `
+  <div class="wizard" style="--primary:${s.accent}">
+    <div class="preview-wrap" style="--accent:${s.accent};--survey-bg:${s.bg}">
+      ${i===0?`<div class="preview-banner" style="${s.banner?`background-image:url('${s.banner}')`:''}"></div>`:''}
+      <div class="preview-body">
+        <div class="chip">${escapeHtml(s.title)}</div>
+        <div class="progress"><div style="width:${progress}%"></div></div>
+        <section class="question-screen">
+          <div class="mini">Pregunta ${i+1} de ${s.questions.length}${q.required?' · obligatoria':''}</div>
+          <h2>${escapeHtml(q.text)}</h2>
+          ${answerControl(q,val,i)}
+          ${(q.type==='text'||q.type==='long')?`
+            <button class="mic" id="micBtn" title="Responder por voz">🎙️</button>
+            <div class="mic-note" id="micNote">Toca el micrófono si quieres responder hablando. La página no leerá la pregunta.</div>`:''}
+          <div class="footer-actions">
+            <button class="ghost" id="prevBtn" ${i===0?'disabled':''}>Anterior</button>
+            <button class="btn" id="nextBtn">${i===s.questions.length-1?'Revisar respuestas':'Siguiente'}</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindRun(){
+  const s=state.currentSurvey, i=state.runIndex, q=s.questions[i];
+
+  if(q.type==='yesno'||q.type==='scale'){
+    $$(`input[name="ans${i}"]`).forEach(el=>el.onchange=()=>state.answers[i]=el.value);
+  }else{
+    const input=$('#answerInput');
+    input.oninput=()=>state.answers[i]=input.value;
+    const mb=$('#micBtn');
+    if(mb) mb.onclick=()=>startVoice(input,mb,$('#micNote'));
   }
 
-  async function requestMic(){
-    if(!navigator.mediaDevices?.getUserMedia) return true;
-    try{
-      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-      stream.getTracks().forEach(t=>t.stop());
-      return true;
-    }catch(e){
-      showToast("No se pudo activar el micrófono. Revisa el permiso del navegador.");
-      return false;
+  $('#prevBtn').onclick=()=>{saveCurrent(); if(state.runIndex>0){state.runIndex--;render();}};
+  $('#nextBtn').onclick=()=>{
+    saveCurrent();
+    if(q.required && !String(state.answers[i]||'').trim()){
+      alert('Esta pregunta es obligatoria.');return;
     }
+    stopRecognition();
+    if(state.runIndex<s.questions.length-1){state.runIndex++;render();}
+    else{state.view='review';render();}
+  };
+}
+
+function saveCurrent(){
+  const i=state.runIndex,q=state.currentSurvey.questions[i];
+  if(q.type==='yesno'||q.type==='scale'){
+    const checked=$(`input[name="ans${i}"]:checked`);
+    if(checked) state.answers[i]=checked.value;
+  }else{
+    const input=$('#answerInput'); if(input) state.answers[i]=input.value;
   }
+}
 
-  function renderTranscript(){
-    const txt=(finalText+" "+interimText).trim();
-    transcriptBox.textContent=txt || "Aquí aparecerá lo que la persona vaya diciendo…";
-    transcriptBox.scrollTop=transcriptBox.scrollHeight;
+function startVoice(input,btn,note){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    note.textContent='Este navegador no ofrece reconocimiento de voz aquí. Puedes escribir la respuesta.';
+    return;
   }
+  stopRecognition();
+  const rec=new SR();
+  state.recognition=rec;
+  rec.lang='es-CO';
+  rec.interimResults=false;
+  rec.continuous=false;
+  rec.maxAlternatives=1;
+  btn.classList.add('listening');
+  note.textContent='Escuchando… habla con normalidad.';
+  rec.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    input.value=(input.value?input.value+' ':'')+t;
+    input.dispatchEvent(new Event('input'));
+  };
+  rec.onerror=e=>{
+    note.textContent=e.error==='not-allowed'?'No se concedió permiso de micrófono. Puedes escribir la respuesta.':'No pude escuchar bien. Puedes intentar de nuevo o escribir.';
+  };
+  rec.onend=()=>{
+    btn.classList.remove('listening');
+    note.textContent='Toca el micrófono si quieres agregar o repetir tu respuesta.';
+    state.recognition=null;
+  };
+  rec.start();
+}
 
-  function setupRecognition(){
-    if(!SpeechRecognition) return;
-    recognition=new SpeechRecognition();
-    recognition.lang="es-CO";
-    recognition.continuous=true;
-    recognition.interimResults=true;
-    recognition.maxAlternatives=1;
+function stopRecognition(){
+  if(state.recognition){try{state.recognition.stop()}catch(e){} state.recognition=null}
+}
 
-    recognition.onstart=()=>{
-      isListening=true;
-      micDot.classList.add("on");
-      micStatus.textContent="Escuchando… habla con tranquilidad";
-    };
+function reviewView(){
+  const s=state.currentSurvey;
+  return `
+  <div class="wizard">
+    <section class="hero"><div><h1>Revisa tus respuestas</h1><p>No mostramos una transcripción continua. Aquí ves la encuesta ya diligenciada y puedes corregir cualquier punto.</p></div></section>
+    <div class="review-grid">
+      ${s.questions.map((q,i)=>`
+        <div class="review-item">
+          <label>${i+1}. ${escapeHtml(q.text)}</label>
+          ${q.type==='long'?`<textarea data-review="${i}">${escapeHtml(state.answers[i]||'')}</textarea>`:
+            `<input type="text" data-review="${i}" value="${escapeHtml(state.answers[i]||'')}">`}
+        </div>`).join('')}
+    </div>
+    <div class="footer-actions">
+      <button class="ghost" id="backToSurvey">Volver a la encuesta</button>
+      <button class="btn" id="submitSurvey">Guardar respuesta</button>
+    </div>
+  </div>`;
+}
 
-    recognition.onresult=(event)=>{
-      interimText="";
-      for(let i=event.resultIndex;i<event.results.length;i++){
-        const text=event.results[i][0].transcript;
-        if(event.results[i].isFinal) finalText += " " + text;
-        else interimText += " " + text;
-      }
-      renderTranscript();
-    };
-
-    recognition.onerror=(event)=>{
-      if(event.error==="not-allowed" || event.error==="service-not-allowed"){
-        keepListening=false;
-        micStatus.textContent="Micrófono bloqueado";
-        showToast("Activa el permiso del micrófono en el navegador.");
-      }else if(event.error==="no-speech"){
-        micStatus.textContent="Sigo escuchando…";
-      }else if(event.error!=="aborted"){
-        micStatus.textContent="Reconectando micrófono…";
-      }
-    };
-
-    recognition.onend=()=>{
-      isListening=false;
-      micDot.classList.remove("on");
-      if(keepListening && !paused){
-        clearTimeout(restartTimer);
-        restartTimer=setTimeout(startListening,350);
-      }
-    };
-  }
-
-  function startListening(){
-    if(!recognition || isListening || paused) return;
-    keepListening=true;
-    try{ recognition.start(); }
-    catch(e){ restartTimer=setTimeout(startListening,550); }
-  }
-
-  function stopListening(){
-    keepListening=false;
-    clearTimeout(restartTimer);
-    if(recognition && isListening){
-      try{recognition.stop()}catch(e){}
-    }
-    isListening=false;
-    micDot.classList.remove("on");
-  }
-
-  async function begin(){
-    const ok=await requestMic();
-    session.classList.remove("hidden");
-    review.classList.add("hidden");
-    finalText=""; interimText=""; paused=false;
-    renderTranscript();
-
-    if(!SpeechRecognition){
-      micStatus.textContent="Este navegador no admite reconocimiento de voz.";
-      showToast("Usa Google Chrome o Microsoft Edge para el modo de voz.");
-      return;
-    }
-
-    if(!recognition) setupRecognition();
-    if(ok) startListening();
-  }
-
-  function normalize(s){
-    return (s||"").toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-      .replace(/[.,;:!?¿¡]/g," ")
-      .replace(/\s+/g," ").trim();
-  }
-
-  function yesNoNear(text, keywords){
-    const n=normalize(text);
-    for(const kw of keywords){
-      const pos=n.indexOf(kw);
-      if(pos>=0){
-        const area=n.slice(Math.max(0,pos-35),Math.min(n.length,pos+90));
-        if(/\b(no|negativo|para nada)\b/.test(area)) return "No";
-        if(/\b(si|claro|afirmativo|correcto)\b/.test(area)) return "Sí";
-      }
-    }
-    return "";
-  }
-
-  function extractEmail(text){
-    const direct=(text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];
-    if(direct) return direct;
-
-    let n=normalize(text)
-      .replace(/\barroba\b/g,"@")
-      .replace(/\bpunto\b/g,".")
-      .replace(/\bguion bajo\b/g,"_")
-      .replace(/\bespacio\b/g,"");
-    const m=n.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
-    return m?m[0]:"";
-  }
-
-  function extractPhone(text){
-    const digits=text.replace(/[^\d+]/g," ");
-    const matches=digits.match(/(?:\+?57\s*)?(?:3\d{2})[\s-]*\d{3}[\s-]*\d{4}/g);
-    if(matches?.length) return matches[0].replace(/[^\d+]/g,"");
-    const any=(text.match(/\b\d[\d\s-]{8,14}\d\b/)||[])[0];
-    return any?any.replace(/\D/g,""):"";
-  }
-
-  function extractName(text){
-    const patterns=[
-      /(?:me llamo|mi nombre es|soy)\s+([a-záéíóúñü]+(?:\s+[a-záéíóúñü]+){1,4})/i,
-      /(?:nombre completo(?: es)?)[\s:]+([a-záéíóúñü]+(?:\s+[a-záéíóúñü]+){1,4})/i
-    ];
-    for(const p of patterns){
-      const m=text.match(p);
-      if(m) return m[1].trim();
-    }
-    return "";
-  }
-
-  function extractCity(text){
-    const patterns=[
-      /(?:vengo de|soy de|vivo en|mi ciudad es|mi municipio es)\s+([a-záéíóúñü\s]{2,40})/i,
-      /(?:ciudad|municipio)[\s:]+([a-záéíóúñü\s]{2,40})/i
-    ];
-    for(const p of patterns){
-      const m=text.match(p);
-      if(m){
-        return m[1].split(/\b(?:y|si|no|actualmente|me enter[eé]|quiero|deseo)\b/i)[0].trim();
-      }
-    }
-    return "";
-  }
-
-  function extractHow(text){
-    const n=normalize(text);
-    if(/amigo|amiga|familiar|familia/.test(n)) return "Invitación de un amigo o familiar";
-    if(/redes|facebook|instagram|tiktok/.test(n)) return "Redes sociales";
-    if(/whatsapp/.test(n)) return "WhatsApp";
-    if(/iglesia|pastor|lider/.test(n)) return "Iglesia";
-    if(/otro|volante|publicidad|radio/.test(n)) return "Otro";
-    return "";
-  }
-
-  function extractPrayer(text){
-    const patterns=[
-      /(?:orar por|oracion por|peticion(?: es)?|acompanarme en)\s+(.+)/i,
-      /(?:quiero que oren por|pueden orar por)\s+(.+)/i
-    ];
-    for(const p of patterns){
-      const m=text.match(p);
-      if(m) return m[1].trim();
-    }
-    return "";
-  }
-
-  function parseTranscript(text){
-    const n=normalize(text);
-
-    return {
-      nombre: extractName(text),
-      whatsapp: extractPhone(text),
-      correo: extractEmail(text),
-      ciudad: extractCity(text),
-      primeraVez: yesNoNear(text,["primera vez","primera ocasion","primera"]),
-      iglesia: yesNoNear(text,["asisto a una iglesia","asistes a una iglesia","iglesia actualmente","actualmente asisto"]),
-      comoSeEntero: extractHow(text),
-      autorizaContacto: yesNoNear(text,["recibir informacion","proximos eventos","mantenerme informado","informacion de eventos"]),
-      peticion: extractPrayer(text),
-      textoCompleto: text.trim()
-    };
-  }
-
-  function fillReview(data){
-    ["nombre","whatsapp","correo","ciudad","primeraVez","iglesia","comoSeEntero","autorizaContacto","peticion","textoCompleto"]
-      .forEach(k=>$(k).value=data[k]||"");
-  }
-
-  function finish(){
-    if(interimText.trim()) finalText += " " + interimText;
-    interimText="";
-    stopListening();
-
-    const full=finalText.trim();
-    if(!full){
-      showToast("No se detectó ninguna respuesta todavía.");
-      return;
-    }
-
-    const parsed=parseTranscript(full);
-    fillReview(parsed);
-    session.classList.add("hidden");
-    review.classList.remove("hidden");
-  }
-
-  function currentRecord(){
-    return {
-      fecha:new Date().toISOString(),
-      nombre:$("nombre").value.trim(),
-      whatsapp:$("whatsapp").value.trim(),
-      correo:$("correo").value.trim(),
-      ciudad:$("ciudad").value.trim(),
-      primeraVez:$("primeraVez").value,
-      iglesia:$("iglesia").value,
-      comoSeEntero:$("comoSeEntero").value.trim(),
-      autorizaContacto:$("autorizaContacto").value,
-      peticion:$("peticion").value.trim(),
-      textoCompleto:$("textoCompleto").value.trim()
-    };
-  }
-
-  function getRecords(){
-    try{return JSON.parse(localStorage.getItem("igle_records")||"[]")}catch(e){return[]}
-  }
-
-  async function saveRecord(){
-    const r=currentRecord();
-    if(!r.nombre){
-      showToast("Revisa el nombre antes de guardar.");
-      return;
-    }
-
-    const records=getRecords();
-    records.push(r);
-    localStorage.setItem("igle_records",JSON.stringify(records));
-
-    const url=sheetUrl.value.trim();
-    if(url){
-      try{
-        await fetch(url,{
-          method:"POST",
-          mode:"no-cors",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify(r)
-        });
-        showToast("Registro guardado y enviado a Google Sheets.");
-      }catch(e){
-        showToast("Guardado localmente. No fue posible enviar a Google Sheets.");
-      }
-    }else{
-      showToast("Registro guardado en este dispositivo.");
-    }
-
-    review.classList.add("hidden");
-    finalText=""; interimText="";
-    renderTranscript();
-  }
-
-  function openRecords(){
-    const records=getRecords();
-    recordCount.textContent=`${records.length} registro${records.length===1?"":"s"} guardado${records.length===1?"":"s"} en este navegador.`;
-    recordsBody.innerHTML="";
-    records.slice().reverse().forEach(r=>{
-      const tr=document.createElement("tr");
-      [
-        r.fecha?new Date(r.fecha).toLocaleString("es-CO"):"",
-        r.nombre||"",r.whatsapp||"",r.correo||"",r.ciudad||"",
-        r.primeraVez||"",r.iglesia||"",r.comoSeEntero||"",
-        r.autorizaContacto||"",r.peticion||""
-      ].forEach(v=>{
-        const td=document.createElement("td");td.textContent=v;tr.appendChild(td);
-      });
-      recordsBody.appendChild(tr);
+function bindReview(){
+  $$('[data-review]').forEach(el=>el.oninput=()=>state.answers[+el.dataset.review]=el.value);
+  $('#backToSurvey').onclick=()=>{state.runIndex=state.currentSurvey.questions.length-1;state.view='run';render()};
+  $('#submitSurvey').onclick=()=>{
+    const responses=store.responses;
+    responses.unshift({
+      id:'r_'+Date.now(),
+      surveyId:state.currentSurvey.id,
+      surveyTitle:state.currentSurvey.title,
+      createdAt:new Date().toISOString(),
+      answers:state.currentSurvey.questions.map((q,i)=>({question:q.text,answer:state.answers[i]||''}))
     });
-    recordsDialog.showModal();
-  }
+    store.responses=responses;
+    state.view='done';render();
+  };
+}
 
-  function exportCSV(){
-    const records=getRecords();
-    if(!records.length){showToast("No hay registros para exportar.");return}
-    const headers=["Fecha","Nombre","WhatsApp","Correo","Ciudad","Primera vez","Asiste a iglesia","Cómo se enteró","Autoriza contacto","Petición","Transcripción"];
-    const rows=records.map(r=>[r.fecha||"",r.nombre||"",r.whatsapp||"",r.correo||"",r.ciudad||"",r.primeraVez||"",r.iglesia||"",r.comoSeEntero||"",r.autorizaContacto||"",r.peticion||"",r.textoCompleto||""]);
-    const esc=v=>`"${String(v).replaceAll('"','""')}"`;
-    const csv="\uFEFF"+[headers,...rows].map(row=>row.map(esc).join(";")).join("\n");
-    const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
-    const url=URL.createObjectURL(blob), a=document.createElement("a");
-    a.href=url;a.download=`registros_iglecrecimiento_${new Date().toISOString().slice(0,10)}.csv`;a.click();
-    URL.revokeObjectURL(url);
-  }
+function doneView(){
+  return `
+  <div class="wizard">
+    <div class="card" style="text-align:center;padding:44px">
+      <div style="font-size:52px">✓</div>
+      <h1>Respuesta guardada</h1>
+      <p style="color:var(--muted)">En esta prueba quedó guardada únicamente en este navegador.</p>
+      <div class="actions" style="justify-content:center;margin-top:20px">
+        <button class="btn" onclick="startSurvey('${state.currentSurvey.id}')">Responder otra vez</button>
+        <button class="ghost" onclick="setView('home')">Volver al inicio</button>
+      </div>
+    </div>
+  </div>`;
+}
 
-  startBtn.addEventListener("click",begin);
-  finishBtn.addEventListener("click",finish);
+function responsesView(){
+  const rows=store.responses;
+  return `
+  <section class="hero">
+    <div><h1>Respuestas</h1><p>Registros almacenados localmente en este dispositivo.</p></div>
+  </section>
+  ${rows.length?rows.map(r=>`
+    <article class="card" style="margin-bottom:12px">
+      <h3>${escapeHtml(r.surveyTitle)}</h3>
+      <p>${new Date(r.createdAt).toLocaleString('es-CO')}</p>
+      <div class="q-list">${r.answers.map(a=>`<div class="q-item"><strong>${escapeHtml(a.question)}</strong><div style="margin-top:6px">${escapeHtml(a.answer||'—')}</div></div>`).join('')}</div>
+    </article>`).join(''):`<div class="empty card">Todavía no hay respuestas.</div>`}`;
+}
 
-  pauseBtn.addEventListener("click",()=>{
-    paused=!paused;
-    if(paused){
-      if(interimText.trim()) finalText+=" "+interimText;
-      interimText="";
-      stopListening();
-      micStatus.textContent="Micrófono pausado";
-      pauseBtn.textContent="▶️ Continuar";
-    }else{
-      pauseBtn.textContent="⏸️ Pausar";
-      keepListening=true;
-      startListening();
-    }
-  });
-
-  cancelBtn.addEventListener("click",()=>{
-    stopListening();session.classList.add("hidden");finalText="";interimText="";renderTranscript();
-  });
-
-  backBtn.addEventListener("click",()=>{
-    finalText=$("textoCompleto").value.trim();
-    review.classList.add("hidden");session.classList.remove("hidden");
-    paused=false;pauseBtn.textContent="⏸️ Pausar";renderTranscript();startListening();
-  });
-
-  discardBtn.addEventListener("click",()=>{
-    review.classList.add("hidden");finalText="";interimText="";renderTranscript();
-  });
-
-  saveBtn.addEventListener("click",saveRecord);
-  recordsBtn.addEventListener("click",openRecords);
-  closeRecordsBtn.addEventListener("click",()=>recordsDialog.close());
-  exportBtn.addEventListener("click",exportCSV);
-
-  clearBtn.addEventListener("click",()=>{
-    if(confirm("¿Seguro que quieres borrar todos los registros guardados localmente?")){
-      localStorage.removeItem("igle_records");
-      openRecords();
-      showToast("Registros locales borrados.");
-    }
-  });
-})();
+render();
 </script>
 </body>
 </html>
