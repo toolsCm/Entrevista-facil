@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Encuestas con Voz</title>
+  <title>Formulario con Voz</title>
   <style>
 
 :root{--p:#5b4ee8;--bg:#f1effb;--card:#fff;--line:#dadce0;--text:#202124;--muted:#5f6368}
@@ -67,15 +67,44 @@ main{max-width:940px;margin:auto;padding:14px 14px 70px}
 .cloud-ok{color:#137333!important}.cloud-warn{color:#b06000!important}.cloud-bad{color:#b3261e!important}
 .cloud-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#9aa0a6;margin-right:6px}.cloud-dot.ok{background:#34a853}.cloud-dot.busy{background:#f9ab00}.cloud-dot.bad{background:#d93025}
 
+
+/* v6 mobile/editor refinements */
+:root{--title-font:Arial;--question-font:Arial;--body-font:Arial;--title-size:30px;--question-size:16px;--body-size:14px}
+body{font-family:var(--body-font),Arial,Helvetica,sans-serif;font-size:var(--body-size)}
+.top-actions{display:flex;align-items:center;gap:8px}.top-theme{font-size:18px}
+.title{display:block;width:100%;border:0;border-bottom:1px solid transparent;outline:none;font-family:var(--title-font),Arial;font-size:var(--title-size);font-weight:400;line-height:1.2;margin:0 0 8px;padding:2px 0;resize:none;overflow:hidden;white-space:pre-wrap;min-height:38px;background:transparent}
+.desc{display:block;width:100%;border:0;outline:none;resize:none;overflow:hidden;white-space:pre-wrap;color:var(--muted);line-height:1.45;min-height:24px;background:transparent;padding:2px 0}
+.qtitle,.ans h3{font-family:var(--question-font),Arial;font-size:var(--question-size)}
+.header-edit-row{display:none;justify-content:space-between;align-items:center;margin-bottom:6px}.mobile-edit-head{padding:7px 10px;font-size:13px}
+.drag{cursor:grab;touch-action:none;user-select:none;font-size:21px;line-height:22px;padding:7px;color:#9aa0a6}.drag:active{cursor:grabbing}.qcard.dragging{opacity:.45;transform:scale(.995);box-shadow:0 10px 22px rgba(60,64,67,.23)}.qcard.drag-over{outline:2px solid rgba(66,133,244,.28);outline-offset:3px}
+.theme-drawer{position:fixed;z-index:140;top:62px;right:0;width:min(340px,94vw);height:calc(100vh - 62px);background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 28px rgba(60,64,67,.18);animation:drawerIn .2s ease;overflow:auto}.theme-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;z-index:2}.theme-body{padding:17px 24px 35px}.theme-body h4{margin:8px 0 14px}.theme-body label{display:block;margin:12px 0 6px;color:#3c4043}.theme-body hr{border:0;border-top:1px solid var(--line);margin:22px 0}.theme-grid{display:grid;grid-template-columns:1fr 72px;gap:8px}.theme-grid select{width:100%;border:1px solid var(--line);border-radius:6px;padding:9px}.theme-upload{display:inline-block!important;border:1px solid var(--line);border-radius:7px;padding:9px 12px;color:#1967d2!important;cursor:pointer}.swatches{display:grid;grid-template-columns:repeat(6,34px);gap:10px}.swatches button{width:30px;height:30px;border:0;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+@keyframes drawerIn{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+.mobile-editor-actions{display:none}.publish-toast{position:fixed;z-index:300;left:50%;bottom:22px;transform:translateX(-50%);max-width:min(560px,92vw);background:#202124;color:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 5px 20px rgba(0,0,0,.28);font-size:14px}
+.bottom-progress{position:fixed;z-index:45;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid #dadce0;padding:8px 14px 10px;backdrop-filter:blur(9px)}.bottom-progress-inner{max-width:760px;margin:auto;display:flex;align-items:center;gap:12px}.bottom-progress .progressbar{flex:1;margin:0;height:7px}.bottom-progress-label{white-space:nowrap;font-size:12px;color:#5f6368;font-weight:700}.run{padding-bottom:92px!important}
+.public-loading{min-height:100vh;background:var(--bg);display:grid;place-items:center;color:#5f6368}.public-loading .sheet{padding:30px;text-align:center;width:min(92vw,520px)}
+@media(max-width:700px){
+  .bar{height:64px;padding:0 12px}.brand{font-size:17px}.logo{width:34px;height:34px}.top-actions .top-preview,.top-actions .top-publish{display:none}.top-theme{display:block}
+  .tabs{top:64px;justify-content:flex-start;padding-left:8px;overflow-x:auto}.tab{padding:0 12px}
+  main{padding:12px 7px 92px}.header-edit-row{display:flex}.headbody{padding:20px}.title{font-size:clamp(26px,var(--title-size),34px)}
+  #headEditor:not(.mobile-editing) .title,#headEditor:not(.mobile-editing) .desc{pointer-events:none;border-bottom-color:transparent}
+  #headEditor.mobile-editing .title,#headEditor.mobile-editing .desc{pointer-events:auto}.mobile-edit-head{display:inline-flex}
+  .mobile-editor-actions{position:fixed;left:12px;right:12px;bottom:10px;z-index:90;display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.96);padding:8px;border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 18px rgba(60,64,67,.24);backdrop-filter:blur(8px)}
+  .theme-drawer{top:64px;height:calc(100vh - 64px)}
+  .qcard{border-radius:8px}.drag{padding:9px}.qbody{padding:7px 14px 15px}.qtop{gap:9px}.qtitle{min-height:48px}
+  .runner-active .mobile-editor-actions{display:none}
+  .bottom-progress{padding-bottom:max(10px,env(safe-area-inset-bottom))}
+}
+
 </style>
 </head>
 <body>
 <div id="builder">
   <header class="bar">
-    <div class="brand"><div class="logo">🎙</div>Encuestas con Voz</div>
-    <div>
-      <button class="ghost btn" id="preview">Vista previa</button>
-      <button class="primary btn" id="respond">Responder</button>
+    <div class="brand"><div class="logo">🎙</div>Formulario con Voz</div>
+    <div class="top-actions">
+      <button class="icon top-theme" id="themeBtn" title="Personalizar tema">🎨</button>
+      <button class="ghost btn top-preview" id="preview">Vista previa</button>
+      <button class="primary btn top-publish" id="publish">Publicar</button>
     </div>
   </header>
 
@@ -94,9 +123,10 @@ main{max-width:940px;margin:auto;padding:14px 14px 70px}
             <button id="removeBanner">Quitar</button>
           </div>
         </div>
-        <div class="headbody">
-          <input class="title" id="title" value="Formulario sin título">
-          <textarea class="desc" id="desc" placeholder="Descripción del formulario"></textarea>
+        <div class="headbody" id="headEditor">
+          <div class="header-edit-row"><span></span><button class="ghost btn mobile-edit-head" id="editHeaderMobile">✎ Editar</button></div>
+          <textarea class="title autogrow" id="title" rows="1" placeholder="Formulario sin título"></textarea>
+          <textarea class="desc autogrow" id="desc" rows="1" placeholder="Descripción del formulario"></textarea>
         </div>
       </div>
 
@@ -215,6 +245,36 @@ main{max-width:940px;margin:auto;padding:14px 14px 70px}
   </main>
 </div>
 
+<aside class="theme-drawer hidden" id="themeDrawer">
+  <div class="theme-head"><strong>🎨 Tema</strong><button class="icon" id="closeTheme">×</button></div>
+  <div class="theme-body">
+    <h4>Estilo de texto</h4>
+    <label>Encabezado</label>
+    <div class="theme-grid"><select id="themeTitleFont"><option>Arial</option><option>Roboto</option><option>Georgia</option><option>Verdana</option><option>Trebuchet MS</option></select><select id="themeTitleSize"><option>22</option><option selected>30</option><option>34</option><option>40</option></select></div>
+    <label>Pregunta</label>
+    <div class="theme-grid"><select id="themeQuestionFont"><option>Arial</option><option>Roboto</option><option>Georgia</option><option>Verdana</option></select><select id="themeQuestionSize"><option>14</option><option selected>16</option><option>18</option><option>20</option></select></div>
+    <label>Texto</label>
+    <div class="theme-grid"><select id="themeBodyFont"><option>Arial</option><option>Roboto</option><option>Georgia</option><option>Verdana</option></select><select id="themeBodySize"><option>12</option><option selected>14</option><option>16</option><option>18</option></select></div>
+    <hr>
+    <h4>Encabezado</h4>
+    <label class="theme-upload">🖼 Seleccionar imagen<input type="file" id="themeBannerFile" accept="image/*" hidden></label>
+    <hr>
+    <h4>Color</h4>
+    <div class="swatches" id="swatches">
+      <button data-color="#d93025" style="--c:#d93025"></button><button data-color="#673ab7" style="--c:#673ab7"></button><button data-color="#3f51b5" style="--c:#3f51b5"></button><button data-color="#4285f4" style="--c:#4285f4"></button>
+      <button data-color="#039be5" style="--c:#039be5"></button><button data-color="#00acc1" style="--c:#00acc1"></button><button data-color="#ff5722" style="--c:#ff5722"></button><button data-color="#ff9800" style="--c:#ff9800"></button>
+      <button data-color="#009688" style="--c:#009688"></button><button data-color="#34a853" style="--c:#34a853"></button><button data-color="#607d8b" style="--c:#607d8b"></button><button data-color="#9e9e9e" style="--c:#9e9e9e"></button>
+    </div>
+  </div>
+</aside>
+
+<div class="mobile-editor-actions" id="mobileEditorActions">
+  <button class="ghost btn" id="mobilePreview">👁 Vista previa</button>
+  <button class="primary btn" id="mobilePublish">➤ Publicar</button>
+</div>
+
+<div id="publishToast" class="publish-toast hidden"></div>
+
 <div id="runner" class="hidden"></div>
 
 <script>
@@ -240,13 +300,16 @@ let state={
     desc:'',
     banner:'',
     questions:[mk('Pregunta sin título','multiple',false,['Opción 1'])],
-    settings:{quiz:false,email:false,edit:false,limit:false,progress:true,shuffle:false,confirm:'Tu respuesta ha sido registrada. Gracias.',defreq:false,voice:'conversation'}
+    settings:{quiz:false,email:false,edit:false,limit:false,progress:true,shuffle:false,confirm:'Tu respuesta ha sido registrada. Gracias.',defreq:false,voice:'conversation'},theme:{accent:'#5b4ee8',bg:'#f1effb',titleFont:'Arial',questionFont:'Arial',bodyFont:'Arial',titleSize:30,questionSize:16,bodySize:14}
   },
   responses:[],
   run:null,
   builderVoice:null,
+  dirty:false,
+  editorMode:true,
+  suppressDirty:false,
   cloud:{
-    apiUrl:localStorage.getItem('ecv5_api_url')||'',
+    apiUrl:localStorage.getItem('ecv6_api_url')||'https://script.google.com/macros/s/AKfycbyiAkU6g2_3Izrw2vPN2fCwE-b4NfVwukWKLZNbNXUyp41BCOGqjglewIFK4PW-c43y/exec',
     formId:'',
     enabled:false,
     autosaveTimer:null
@@ -257,21 +320,25 @@ function mk(title,type='multiple',required=false,options=[]){
   return{id:uid(),title,type,required,options,scaleMin:1,scaleMax:5,rows:['Fila 1'],columns:['Columna 1']}
 }
 function save(){
-  localStorage.setItem('ecv5_survey',JSON.stringify(state.survey));
-  localStorage.setItem('ecv5_responses',JSON.stringify(state.responses));
+  if(!state.suppressDirty)state.dirty=true;
+  localStorage.setItem('ecv6_survey',JSON.stringify(state.survey));
+  localStorage.setItem('ecv6_responses',JSON.stringify(state.responses));
   if(state.cloud.enabled) scheduleCloudSave()
 }
 try{
-  const s=JSON.parse(localStorage.getItem('ecv5_survey')||'null');
-  if(s)state.survey={...state.survey,...s,settings:{...state.survey.settings,...(s.settings||{})}};
-  state.responses=JSON.parse(localStorage.getItem('ecv5_responses')||'[]')
+  const s=JSON.parse(localStorage.getItem('ecv6_survey')||'null');
+  if(s)state.survey={...state.survey,...s,settings:{...state.survey.settings,...(s.settings||{})},theme:{...state.survey.theme,...(s.theme||{})}};
+  state.responses=JSON.parse(localStorage.getItem('ecv6_responses')||'[]')
 }catch(e){}
 
 $('#title').value=state.survey.title;
 $('#desc').value=state.survey.desc;
+function autoGrow(el){if(!el)return;el.style.height='auto';el.style.height=Math.max(el.scrollHeight,el===document.querySelector('#title')?38:24)+'px'}
+function growHeader(){autoGrow($('#title'));autoGrow($('#desc'))}
+setTimeout(growHeader,0);
 if(state.survey.banner)$('#banner').style.backgroundImage=`url('${state.survey.banner}')`;
-$('#title').oninput=e=>{state.survey.title=e.target.value;save()};
-$('#desc').oninput=e=>{state.survey.desc=e.target.value;save()};
+$('#title').oninput=e=>{state.survey.title=e.target.value;autoGrow(e.target);save()};
+$('#desc').oninput=e=>{state.survey.desc=e.target.value;autoGrow(e.target);save()};
 $('#bannerFile').onchange=e=>{
   const f=e.target.files?.[0];if(!f)return;
   const r=new FileReader();
@@ -311,8 +378,8 @@ function editor(q,i){
 }
 
 function renderQ(){
-  $('#qlist').innerHTML=state.survey.questions.map((q,i)=>`<div class="qcard ${i===state.active?'active':''}" data-card="${i}">
-    <div class="drag">⠿</div><div class="qbody">
+  $('#qlist').innerHTML=state.survey.questions.map((q,i)=>`<div class="qcard ${i===state.active?'active':''}" data-card="${i}" data-qid="${q.id}">
+    <div class="drag" data-drag-handle="${q.id}" title="Arrastra para mover">⠿</div><div class="qbody">
       <div class="qtop"><input class="qtitle" data-title="${i}" value="${esc(q.title)}"><button class="typebtn" data-type="${i}">${ti(q.type)} &nbsp; ${tl(q.type)} <span style="float:right">⌄</span></button></div>
       <div class="opts">${editor(q,i)}</div>
       <div class="qfoot">
@@ -337,8 +404,47 @@ function bindQ(){
   $$('[data-row]').forEach(e=>e.oninput=()=>{const[i,j]=e.dataset.row.split(':').map(Number);state.survey.questions[i].rows[j]=e.value;save()});
   $$('[data-col]').forEach(e=>e.oninput=()=>{const[i,j]=e.dataset.col.split(':').map(Number);state.survey.questions[i].columns[j]=e.value;save()});
   $$('[data-addrow]').forEach(e=>e.onclick=()=>{const i=+e.dataset.addrow;state.survey.questions[i].rows.push('Fila');renderQ();save()});
-  $$('[data-addcol]').forEach(e=>e.onclick=()=>{const i=+e.dataset.addcol;state.survey.questions[i].columns.push('Columna');renderQ();save()})
+  $$('[data-addcol]').forEach(e=>e.onclick=()=>{const i=+e.dataset.addcol;state.survey.questions[i].columns.push('Columna');renderQ();save()});
+  bindQuestionDrag();
 }
+
+function bindQuestionDrag(){
+  $$('[data-drag-handle]').forEach(handle=>{
+    handle.onpointerdown=ev=>{
+      if(ev.button!==undefined&&ev.button!==0)return;
+      const card=handle.closest('.qcard');if(!card)return;
+      ev.preventDefault();
+      const draggedId=card.dataset.qid;
+      card.classList.add('dragging');
+      try{handle.setPointerCapture(ev.pointerId)}catch(e){}
+      const move=e=>{
+        e.preventDefault();
+        const el=document.elementFromPoint(e.clientX,e.clientY);
+        const target=el?.closest?.('.qcard');
+        $$('.qcard.drag-over').forEach(x=>x.classList.remove('drag-over'));
+        if(!target||target===card)return;
+        target.classList.add('drag-over');
+        const rect=target.getBoundingClientRect();
+        const after=e.clientY>rect.top+rect.height/2;
+        const parent=target.parentNode;
+        if(after)parent.insertBefore(card,target.nextSibling);else parent.insertBefore(card,target)
+      };
+      const up=e=>{
+        handle.removeEventListener('pointermove',move);handle.removeEventListener('pointerup',up);handle.removeEventListener('pointercancel',up);
+        card.classList.remove('dragging');$$('.qcard.drag-over').forEach(x=>x.classList.remove('drag-over'));
+        try{handle.releasePointerCapture(e.pointerId)}catch(err){}
+        const order=$$('#qlist .qcard').map(x=>x.dataset.qid);
+        const byId=new Map(state.survey.questions.map(q=>[q.id,q]));
+        const activeId=state.survey.questions[state.active]?.id;
+        state.survey.questions=order.map(id=>byId.get(id)).filter(Boolean);
+        state.active=Math.max(0,state.survey.questions.findIndex(q=>q.id===activeId));
+        renderQ();save()
+      };
+      handle.addEventListener('pointermove',move);handle.addEventListener('pointerup',up);handle.addEventListener('pointercancel',up)
+    }
+  })
+}
+
 function typeMenu(anchor,i){
   $('.type-menu')?.remove();const r=anchor.getBoundingClientRect(),m=document.createElement('div');m.className='type-menu';m.style.left=Math.min(r.left,innerWidth-320)+'px';m.style.top=Math.min(r.bottom+4,innerHeight-420)+'px';
   m.innerHTML=TYPES.map(t=>t[0]==='sep'?'<div class="sep"></div>':`<button data-pick="${t[0]}">${t[1]} &nbsp; ${t[2]}</button>`).join('');document.body.appendChild(m);
@@ -428,12 +534,12 @@ $('#voicemode').value=state.survey.settings.voice||'conversation';$('#voicemode'
 
 /* Respuestas guardadas */
 function renderResponses(){
-  const x=$('#responses');if(!state.responses.length){x.innerHTML='<div class="mini" style="padding:35px;text-align:center">Aún no hay respuestas.</div>';return}
+  const x=$('#responses');if(!state.responses.length){x.innerHTML='<div class="mini" style="padding:35px;text-align:center">No hay respuestas. Publica tu formulario para comenzar a aceptar respuestas.</div>';return}
   x.innerHTML=`<h2>${state.responses.length} respuestas</h2>`+state.responses.map((r,i)=>`<details class="sheet" style="padding:14px"><summary><strong>Respuesta ${state.responses.length-i}</strong> · ${new Date(r.createdAt).toLocaleString('es-CO')}</summary>${r.answers.map(a=>`<p><strong>${esc(a.question)}</strong><br>${esc(Array.isArray(a.answer)?a.answer.join(', '):a.answer||'—')}</p>`).join('')}</details>`).join('')
 }
 
 $('#preview').onclick=()=>startRun(true);
-$('#respond').onclick=()=>startRun(false);
+$('#publish').onclick=publishForm;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
 
@@ -455,8 +561,8 @@ function initCloudUI(){
   const api=$('#cloudApiUrl'),fid=$('#cloudFormId');
   if(api)api.value=state.cloud.apiUrl||'';
   if(fid)fid.value=state.survey.formId||state.cloud.formId;
-  if(api)api.oninput=()=>{state.cloud.apiUrl=normalizeApiUrl(api.value);localStorage.setItem('ecv5_api_url',state.cloud.apiUrl)};
-  $('#cloudSave').onclick=async()=>{state.cloud.apiUrl=normalizeApiUrl($('#cloudApiUrl').value);localStorage.setItem('ecv5_api_url',state.cloud.apiUrl);if(!state.cloud.apiUrl)return cloudSetStatus('Pega primero la URL /exec del Web App.','bad');state.cloud.enabled=true;await saveFormCloud(true)};
+  if(api)api.oninput=()=>{state.cloud.apiUrl=normalizeApiUrl(api.value);localStorage.setItem('ecv6_api_url',state.cloud.apiUrl)};
+  $('#cloudSave').onclick=async()=>{state.cloud.apiUrl=normalizeApiUrl($('#cloudApiUrl').value);localStorage.setItem('ecv6_api_url',state.cloud.apiUrl);if(!state.cloud.apiUrl)return cloudSetStatus('Pega primero la URL /exec del Web App.','bad');state.cloud.enabled=true;await saveFormCloud(true)};
   $('#cloudTest').onclick=async()=>{state.cloud.apiUrl=normalizeApiUrl($('#cloudApiUrl').value);if(!state.cloud.apiUrl)return cloudSetStatus('Pega primero la URL del Web App.','bad');cloudSetStatus('Probando conexión…','warn');try{const x=await cloudJsonp({action:'ping'});cloudSetStatus(x?.ok?'Conexión correcta con Google Apps Script.':'El servidor respondió, pero no confirmó la conexión.',x?.ok?'ok':'warn')}catch(e){cloudSetStatus('No pude leer el Web App. Revisa despliegue y permisos.','bad')}};
   $('#copyPublicLink').onclick=()=>copyCloudLink(false);
   $('#copyEditLink').onclick=()=>copyCloudLink(true)
@@ -473,9 +579,9 @@ async function saveFormCloud(showStatus=false){
   const payload={formId:state.survey.formId,survey:state.survey,updatedAt:new Date().toISOString()};
   try{
     await cloudPost('saveForm',payload);
-    localStorage.setItem('ecv5_api_url',api);
+    localStorage.setItem('ecv6_api_url',api);
     if($('#cloudFormId'))$('#cloudFormId').value=state.survey.formId;
-    if(showStatus)cloudSetStatus('Formulario enviado. Ya puedes abrir el enlace público en otro dispositivo.','ok')
+    state.dirty=false;if(showStatus)cloudSetStatus('Formulario enviado. Ya puedes abrir el enlace público en otro dispositivo.','ok')
   }catch(e){if(showStatus)cloudSetStatus('No fue posible enviar el formulario.','bad')}
 }
 function cloudPost(action,payload){
@@ -514,20 +620,31 @@ async function copyCloudLink(edit){
 async function loadFormCloud(formId){
   const data=await cloudJsonp({action:'getForm',formId});
   if(!data?.ok||!data.survey)throw new Error(data?.error||'Formulario no encontrado');
-  state.survey={...state.survey,...data.survey,settings:{...state.survey.settings,...(data.survey.settings||{})}};
-  state.cloud.formId=formId;state.survey.formId=formId;state.cloud.enabled=true;
-  localStorage.setItem('ecv5_survey',JSON.stringify(state.survey));
+  state.survey={...state.survey,...data.survey,settings:{...state.survey.settings,...(data.survey.settings||{})},theme:{...state.survey.theme,...(data.survey.theme||{})}};
+  state.cloud.formId=formId;state.survey.formId=formId;state.cloud.enabled=true;state.dirty=false;
+  localStorage.setItem('ecv6_survey',JSON.stringify(state.survey));
   return state.survey
 }
+
+function preBootstrapMode(){
+  const p=new URLSearchParams(location.search),form=p.get('form'),edit=p.get('edit')==='1';
+  state.editorMode=!form||edit;
+  if(form&&!edit){
+    $('#builder').classList.add('hidden');$('#mobileEditorActions').classList.add('hidden');
+    $('#runner').classList.remove('hidden');
+    $('#runner').innerHTML='<div class="public-loading"><div class="sheet"><strong>Cargando formulario…</strong><div class="mini" style="margin-top:8px">Formulario con Voz</div></div></div>'
+  }
+}
+
 async function bootstrapCloudFromUrl(){
   const p=new URLSearchParams(location.search),api=p.get('api'),formId=p.get('form'),edit=p.get('edit')==='1';
   if(!api||!formId){initCloudUI();return}
-  state.cloud.apiUrl=normalizeApiUrl(api);state.cloud.formId=formId;localStorage.setItem('ecv5_api_url',state.cloud.apiUrl);
+  state.cloud.apiUrl=normalizeApiUrl(api);state.cloud.formId=formId;localStorage.setItem('ecv6_api_url',state.cloud.apiUrl);
   try{
     await loadFormCloud(formId);
     $('#title').value=state.survey.title;$('#desc').value=state.survey.desc;
     if(state.survey.banner)$('#banner').style.backgroundImage=`url('${state.survey.banner}')`;else $('#banner').style.backgroundImage='';
-    renderQ();initCloudUI();
+    renderQ();applyTheme();growHeader();initCloudUI();
     if(!edit)startRun(false);else cloudSetStatus('Formulario cargado desde Google Sheets. Los cambios se sincronizan automáticamente.','ok')
   }catch(e){initCloudUI();cloudSetStatus('No pude cargar el formulario desde Google Sheets: '+e.message,'bad')}
 }
@@ -540,6 +657,37 @@ async function bootstrapCloudFromUrl(){
    - No muestra la transcripción.
    - Las correcciones posteriores sustituyen datos anteriores.
    ========================================================= */
+
+
+function showToast(msg,ms=4200){const t=$('#publishToast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.add('hidden'),ms)}
+async function publishForm(){
+  state.cloud.apiUrl=cloudApi()||'https://script.google.com/macros/s/AKfycbyiAkU6g2_3Izrw2vPN2fCwE-b4NfVwukWKLZNbNXUyp41BCOGqjglewIFK4PW-c43y/exec';
+  if(!state.cloud.apiUrl)return showToast('Configura primero Google Sheets.');
+  state.cloud.enabled=true;
+  try{await saveFormCloud(false);state.survey.published=true;state.survey.publishedAt=new Date().toISOString();state.dirty=false;localStorage.setItem('ecv6_survey',JSON.stringify(state.survey));const link=buildShareLink(false);await copyText(link);showToast('Formulario publicado. El enlace público quedó copiado.')}catch(e){showToast('No pude publicar. Revisa la conexión de Google Apps Script.')}
+}
+function applyTheme(){
+  const t=state.survey.theme||{};
+  document.documentElement.style.setProperty('--p',t.accent||'#5b4ee8');
+  document.documentElement.style.setProperty('--bg',t.bg||'#f1effb');
+  document.documentElement.style.setProperty('--title-font',t.titleFont||'Arial');
+  document.documentElement.style.setProperty('--question-font',t.questionFont||'Arial');
+  document.documentElement.style.setProperty('--body-font',t.bodyFont||'Arial');
+  document.documentElement.style.setProperty('--title-size',(t.titleSize||30)+'px');
+  document.documentElement.style.setProperty('--question-size',(t.questionSize||16)+'px');
+  document.documentElement.style.setProperty('--body-size',(t.bodySize||14)+'px')
+}
+function initTheme(){
+  state.survey.theme={accent:'#5b4ee8',bg:'#f1effb',titleFont:'Arial',questionFont:'Arial',bodyFont:'Arial',titleSize:30,questionSize:16,bodySize:14,...(state.survey.theme||{})};applyTheme();
+  $('#themeBtn').onclick=()=>$('#themeDrawer').classList.remove('hidden');$('#closeTheme').onclick=()=>$('#themeDrawer').classList.add('hidden');
+  const bindSel=(id,key,num=false)=>{const e=$(id);e.value=state.survey.theme[key];e.onchange=()=>{state.survey.theme[key]=num?+e.value:e.value;applyTheme();save();growHeader()}};
+  bindSel('#themeTitleFont','titleFont');bindSel('#themeQuestionFont','questionFont');bindSel('#themeBodyFont','bodyFont');bindSel('#themeTitleSize','titleSize',true);bindSel('#themeQuestionSize','questionSize',true);bindSel('#themeBodySize','bodySize',true);
+  $$('#swatches [data-color]').forEach(b=>b.onclick=()=>{state.survey.theme.accent=b.dataset.color;state.survey.theme.bg=colorBg(b.dataset.color);applyTheme();save()});
+  $('#themeBannerFile').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{state.survey.banner=r.result;$('#banner').style.backgroundImage=`url('${r.result}')`;save()};r.readAsDataURL(f)}
+}
+function colorBg(hex){try{let h=hex.replace('#','');let r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);r=Math.round(r+(255-r)*.91);g=Math.round(g+(255-g)*.91);b=Math.round(b+(255-b)*.91);return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return '#f1effb'}}
+$('#mobilePreview').onclick=()=>startRun(true);$('#mobilePublish').onclick=publishForm;
+$('#editHeaderMobile').onclick=()=>{const h=$('#headEditor');h.classList.toggle('mobile-editing');$('#editHeaderMobile').textContent=h.classList.contains('mobile-editing')?'✓ Listo':'✎ Editar';if(h.classList.contains('mobile-editing'))$('#title').focus();growHeader()};
 
 function startRun(preview){
   const qs=state.survey.settings.shuffle?shuffle([...state.survey.questions]):[...state.survey.questions];
@@ -556,7 +704,7 @@ function startRun(preview){
     processing:false,
     changedIds:new Set()
   };
-  $('#builder').classList.add('hidden');$('#runner').classList.remove('hidden');
+  $('#builder').classList.add('hidden');$('#runner').classList.remove('hidden');document.body.classList.add('runner-active');
   renderRun();startMic()
 }
 
@@ -598,7 +746,7 @@ function renderRun(){
       <div class="headbody"><h1>${esc(s.title)}</h1><div class="mini">${esc(s.desc)}</div></div>
     </div>
 
-    ${s.settings.progress?`<div class="progressbar"><div class="progressfill" id="progressFill" style="width:${total?count/total*100:0}%"></div></div>`:''}
+    
 
     ${r.qs.map((q,i)=>{
       const filled=answerFilled(r.answers[q.id]),warn=!!r.reviewFlags[q.id];
@@ -615,6 +763,7 @@ function renderRun(){
       <button class="soft btn" id="cancelrun">Cancelar</button>
       <button class="primary btn" id="reviewrun">Revisar respuestas</button>
     </div>
+    ${s.settings.progress?`<div class="bottom-progress"><div class="bottom-progress-inner"><div class="progressbar"><div class="progressfill" id="progressFill" style="width:${total?count/total*100:0}%"></div></div><span class="bottom-progress-label" id="bottomProgressLabel">${count} de ${total}</span></div></div>`:''}
   </div></div>`;
   bindRun()
 }
@@ -642,7 +791,7 @@ function updateFocus(){
 function updateCounter(){
   const count=answeredCount(),total=state.run.qs.length;
   if($('#answerCounter'))$('#answerCounter').textContent=`${count} de ${total} identificadas`;
-  if($('#progressFill'))$('#progressFill').style.width=`${total?count/total*100:0}%`
+  if($('#progressFill'))$('#progressFill').style.width=`${total?count/total*100:0}%`;if($('#bottomProgressLabel'))$('#bottomProgressLabel').textContent=`${count} de ${total}`
 }
 function updateCardState(id,flash=false){
   const card=$(`#card_${id}`);if(!card)return;
@@ -1042,18 +1191,27 @@ function submitRun(){
   const miss=state.run.qs.find(q=>q.required&&!answerFilled(state.run.answers[q.id]));
   if(miss)return alert('Falta responder: '+miss.title);
   const responseRecord={id:'resp_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),formId:state.survey.formId||'',answers:state.run.qs.map(q=>({qid:q.id,question:q.title,answer:state.run.answers[q.id]??''}))};
-  state.responses.unshift(responseRecord);
+  state.responses.unshift(responseRecord);state.run.submitted=true;
   save();
   if(cloudApi()&&state.survey.formId)cloudPost('submitResponse',responseRecord).catch(()=>{});
   const msg=state.survey.settings.confirm||'Tu respuesta ha sido registrada. Gracias.';
   $('#runner').innerHTML=`<div class="run"><div class="runinner"><div class="sheet" style="padding:45px;text-align:center"><div style="font-size:48px;color:#34a853">✓</div><h1>${esc(msg)}</h1><button class="primary btn" id="done">Finalizar</button></div></div></div>`;
   $('#done').onclick=exitRun
 }
-function exitRun(){stopMic();state.run=null;$('#runner').classList.add('hidden');$('#builder').classList.remove('hidden')}
+function exitRun(){stopMic();state.run=null;document.body.classList.remove('runner-active');$('#runner').classList.add('hidden');$('#builder').classList.remove('hidden')}
 
+
+applyTheme();
+initTheme();
+preBootstrapMode();
+window.addEventListener('beforeunload',e=>{
+  const runHasWork=!!(state.run&&!state.run.submitted&&(state.run.utterances?.length||Object.values(state.run.answers||{}).some(answerFilled)));
+  if((state.editorMode&&state.dirty)||runHasWork){e.preventDefault();e.returnValue=''}
+});
 renderQ();
 initCloudUI();
 bootstrapCloudFromUrl();
+setTimeout(growHeader,20);
 
 </script>
 </body>
