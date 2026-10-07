@@ -6,960 +6,638 @@
   <title>Iglecrecimiento - Registro por voz</title>
   <style>
     :root{
-      --bg:#f5f7fb;
-      --card:#ffffff;
-      --text:#172033;
-      --muted:#6b7280;
-      --primary:#2854c5;
-      --primary-2:#1f3f96;
-      --ok:#0f9d58;
-      --warn:#f59e0b;
-      --danger:#dc2626;
-      --border:#e5e7eb;
-      --shadow:0 14px 35px rgba(20,30,55,.10);
+      --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#667085;
+      --primary:#2854c5; --primary-dark:#1e3f96; --border:#e4e7ec;
+      --soft:#f8faff; --ok:#159455; --danger:#c92a2a;
+      --shadow:0 18px 45px rgba(20,30,55,.10);
     }
-
     *{box-sizing:border-box}
     body{
-      margin:0;
-      min-height:100vh;
-      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:linear-gradient(180deg,#eef3ff 0%,var(--bg) 35%,#fff 100%);
-      color:var(--text);
+      margin:0; min-height:100vh; color:var(--text);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#edf3ff 0%,#f7f8fb 40%,#fff 100%);
     }
-
-    .wrap{
-      width:min(960px, calc(100% - 28px));
-      margin:0 auto;
-      padding:28px 0 60px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:18px;
-    }
-
-    .brand h1{
-      margin:0;
-      font-size:clamp(26px,4vw,40px);
-      letter-spacing:-.03em;
-    }
-
-    .badge{
-      background:#e8efff;
-      color:var(--primary-2);
-      border:1px solid #cfdcff;
-      border-radius:999px;
-      padding:8px 12px;
-      font-size:13px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:clamp(18px,3vw,30px);
-    }
-
-    .intro{
-      display:grid;
-      grid-template-columns:1.5fr .9fr;
-      gap:20px;
-      align-items:center;
-    }
-
-    .intro p{
-      color:var(--muted);
-      line-height:1.6;
-      margin:8px 0 0;
-      font-size:16px;
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
+    .wrap{width:min(1060px,calc(100% - 28px));margin:auto;padding:28px 0 64px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    h1{margin:0;font-size:clamp(28px,4vw,42px);letter-spacing:-.04em}
+    .badge{padding:8px 12px;border:1px solid #cbd8ff;background:#eaf0ff;color:#24469f;border-radius:999px;font-weight:800;font-size:13px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);padding:clamp(18px,3vw,30px)}
+    .hero{display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:center}
+    h2{margin:0 0 8px;font-size:clamp(22px,3vw,30px)}
+    p{color:var(--muted);line-height:1.6}
+    .actions,.toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .actions{justify-content:flex-end}
     button{
-      appearance:none;
-      border:0;
-      border-radius:14px;
-      padding:13px 16px;
-      font-size:15px;
-      font-weight:750;
-      cursor:pointer;
+      border:0;border-radius:14px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;
       transition:.2s ease;
     }
-
     button:hover{transform:translateY(-1px)}
-    button:disabled{opacity:.5; cursor:not-allowed; transform:none}
-
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      box-shadow:0 8px 18px rgba(40,84,197,.22);
-    }
-
-    .btn-secondary{
-      background:#eef2f7;
-      color:#243043;
-      border:1px solid #dce3ec;
-    }
-
-    .btn-danger{
-      background:#fff1f2;
-      color:#b42318;
-      border:1px solid #fecdd3;
-    }
-
+    button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .primary{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(40,84,197,.22)}
+    .secondary{background:#eef2f7;color:#243043;border:1px solid #dce3ec}
+    .danger{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9}
     .hidden{display:none!important}
-
-    .session{
-      margin-top:18px;
-      display:grid;
-      gap:16px;
+    .session{margin-top:20px;display:grid;grid-template-columns:.82fr 1.18fr;gap:18px}
+    .panel{border:1px solid var(--border);border-radius:20px;background:var(--soft);padding:20px}
+    .panel h3{margin:0 0 12px}
+    .questions{display:grid;gap:9px}
+    .q{
+      display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:start;
+      padding:10px 11px;border-radius:12px;background:#fff;border:1px solid #e8ecf3;
+      color:#344054;font-size:14px;
     }
-
-    .progress{
-      width:100%;
-      height:10px;
-      background:#edf1f5;
-      border-radius:999px;
-      overflow:hidden;
+    .num{
+      width:25px;height:25px;border-radius:8px;background:#e9efff;color:#24469f;
+      display:grid;place-items:center;font-weight:900;font-size:12px
     }
-
-    .progress > div{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--primary),#6b8cff);
-      transition:width .35s ease;
+    .micline{
+      display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;
+      background:#fff;border:1px solid #dce4ef;margin-bottom:12px
     }
-
-    .question-box{
-      border:1px solid #dbe4f0;
-      background:#f9fbff;
-      border-radius:20px;
-      padding:22px;
+    .dot{width:12px;height:12px;border-radius:50%;background:#c6ccd5;flex:0 0 auto}
+    .dot.on{background:#ef4444;box-shadow:0 0 0 7px rgba(239,68,68,.12);animation:pulse 1s infinite}
+    @keyframes pulse{50%{transform:scale(1.15)}}
+    .transcript{
+      width:100%;min-height:310px;max-height:430px;overflow:auto;white-space:pre-wrap;
+      padding:16px;border-radius:16px;border:1px solid #dce4ef;background:#fff;
+      color:#26334a;line-height:1.65;font-size:16px
     }
-
-    .step{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.08em;
+    .hint{font-size:13px;color:var(--muted);margin-top:10px}
+    .review{margin-top:20px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .field{display:grid;gap:6px}
+    .field.full{grid-column:1/-1}
+    label{font-size:13px;font-weight:800;color:#344054}
+    input,textarea,select{
+      width:100%;border:1px solid #d6dbe4;border-radius:12px;padding:12px 13px;
+      font:inherit;color:var(--text);background:#fff;outline:none
     }
-
-    .question{
-      font-size:clamp(22px,3vw,32px);
-      font-weight:800;
-      line-height:1.25;
-      margin:8px 0 12px;
-      letter-spacing:-.02em;
-    }
-
-    .answer-live{
-      min-height:56px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      border:1px dashed #b9c7dd;
-      border-radius:16px;
-      padding:12px 14px;
-      background:#fff;
-      color:#25324a;
-    }
-
-    .mic-dot{
-      width:12px;
-      height:12px;
-      border-radius:999px;
-      background:#c5ccd8;
-      flex:0 0 auto;
-    }
-
-    .mic-dot.listening{
-      background:#ef4444;
-      box-shadow:0 0 0 7px rgba(239,68,68,.12);
-      animation:pulse 1s infinite;
-    }
-
-    @keyframes pulse{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.15)}
-    }
-
-    .status{
-      font-size:14px;
-      color:var(--muted);
-      margin-top:10px;
-    }
-
-    .manual{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-    }
-
-    .manual input, .manual textarea, .manual select{
-      width:100%;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:12px 13px;
-      font:inherit;
-      outline:none;
-      background:#fff;
-    }
-
-    .manual textarea{min-height:90px; resize:vertical}
-
-    .review{
-      display:grid;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .review-row{
-      display:grid;
-      grid-template-columns:220px 1fr;
-      gap:12px;
-      border-bottom:1px solid var(--border);
-      padding:10px 0;
-    }
-
-    .review-row strong{color:#2c3850}
-    .review-row span{color:#4b5563; word-break:break-word}
-
-    .toast{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      width:min(360px,calc(100% - 36px));
-      padding:14px 16px;
-      border-radius:14px;
-      background:#111827;
-      color:#fff;
-      box-shadow:0 16px 32px rgba(0,0,0,.25);
-      z-index:50;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:18px;
-    }
-
+    input:focus,textarea:focus,select:focus{border-color:#8eabff;box-shadow:0 0 0 3px rgba(40,84,197,.08)}
+    textarea{min-height:90px;resize:vertical}
+    .config{margin-top:18px;padding:15px;border-radius:16px;border:1px solid #dbe4f0;background:#fbfcff}
+    .config .hint{margin-top:7px}
     dialog{
-      width:min(1100px,calc(100% - 24px));
-      max-height:88vh;
-      border:0;
-      border-radius:22px;
-      box-shadow:0 30px 80px rgba(0,0,0,.25);
-      padding:0;
+      width:min(1160px,calc(100% - 24px));max-height:88vh;border:0;border-radius:22px;padding:0;
+      box-shadow:0 30px 80px rgba(0,0,0,.24)
     }
-
-    dialog::backdrop{background:rgba(15,23,42,.56)}
-
-    .modal-head{
-      position:sticky;
-      top:0;
-      background:#fff;
-      border-bottom:1px solid var(--border);
-      padding:18px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      z-index:2;
-    }
-
-    .modal-body{padding:18px 20px 24px; overflow:auto}
-
-    .table-wrap{overflow:auto; border:1px solid var(--border); border-radius:14px}
-    table{width:100%; border-collapse:collapse; min-width:1100px}
-    th,td{padding:10px 12px; border-bottom:1px solid var(--border); text-align:left; font-size:13px}
-    th{background:#f8fafc; position:sticky; top:0; z-index:1}
-
-    .small-note{
-      font-size:13px;
-      color:var(--muted);
-      margin-top:10px;
-      line-height:1.5;
-    }
-
-    .config{
-      margin-top:18px;
-      padding:16px;
-      border-radius:16px;
-      border:1px solid #dbe4f0;
-      background:#fbfcff;
-    }
-
-    .config label{
-      display:block;
-      font-size:13px;
-      font-weight:750;
-      margin-bottom:6px;
-    }
-
-    .config input{
-      width:100%;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:11px 12px;
-      font:inherit;
-    }
-
-    @media (max-width:740px){
-      .intro{grid-template-columns:1fr}
+    dialog::backdrop{background:rgba(15,23,42,.55)}
+    .modal-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);padding:18px 20px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+    .modal-body{padding:18px 20px 24px;overflow:auto}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:14px}
+    table{width:100%;border-collapse:collapse;min-width:1100px}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;text-align:left}
+    th{background:#f8fafc}
+    .toast{position:fixed;right:18px;bottom:18px;width:min(390px,calc(100% - 36px));padding:14px 16px;border-radius:14px;background:#111827;color:#fff;box-shadow:0 16px 32px rgba(0,0,0,.25);z-index:50}
+    @media(max-width:800px){
+      .hero,.session,.grid{grid-template-columns:1fr}
       .actions{justify-content:flex-start}
-      .review-row{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="brand">
-      <h1>Iglecrecimiento</h1>
-      <span class="badge">Registro por voz</span>
+<main class="wrap">
+  <div class="top">
+    <h1>Iglecrecimiento</h1>
+    <span class="badge">Registro continuo por voz</span>
+  </div>
+
+  <section class="card">
+    <div class="hero">
+      <div>
+        <h2>Registro sencillo, sin interrupciones</h2>
+        <p>
+          La página no lee las preguntas. Al comenzar, activa el micrófono y deja hablar a la persona
+          con tranquilidad. Al final organiza la información y permite revisar todo antes de guardarlo.
+        </p>
+      </div>
+      <div class="actions">
+        <button class="primary" id="startBtn">🎙️ Comenzar</button>
+        <button class="secondary" id="recordsBtn">👥 Ver registros</button>
+      </div>
     </div>
 
-    <section class="card">
-      <div class="intro">
-        <div>
-          <h2 style="margin:0">Bienvenido</h2>
-          <p>
-            Presiona <strong>Comenzar registro</strong>. La aplicación te hará las preguntas en voz alta
-            y escuchará tus respuestas una por una. También puedes escribirlas manualmente.
-          </p>
+    <section class="session hidden" id="session">
+      <div class="panel">
+        <h3>Información que necesitamos</h3>
+        <div class="questions">
+          <div class="q"><span class="num">1</span><span>Nombre completo</span></div>
+          <div class="q"><span class="num">2</span><span>Número de celular / WhatsApp</span></div>
+          <div class="q"><span class="num">3</span><span>Correo electrónico (opcional)</span></div>
+          <div class="q"><span class="num">4</span><span>Ciudad o municipio de donde viene</span></div>
+          <div class="q"><span class="num">5</span><span>Si es su primera vez en Iglecrecimiento</span></div>
+          <div class="q"><span class="num">6</span><span>Si actualmente asiste a una iglesia</span></div>
+          <div class="q"><span class="num">7</span><span>Cómo se enteró de Iglecrecimiento</span></div>
+          <div class="q"><span class="num">8</span><span>Si desea recibir información de próximos eventos</span></div>
+          <div class="q"><span class="num">9</span><span>Petición de acompañamiento u oración (opcional)</span></div>
         </div>
-        <div class="actions">
-          <button class="btn-primary" id="startBtn">🎙️ Comenzar registro</button>
-          <button class="btn-secondary" id="recordsBtn">👥 Ver registros</button>
-        </div>
+        <p class="hint">
+          Puede responder siguiendo este orden, como si estuviera conversando. No hace falta esperar entre una respuesta y otra.
+        </p>
       </div>
 
-      <div class="session hidden" id="session">
-        <div class="progress"><div id="progressBar"></div></div>
+      <div class="panel">
+        <div class="micline">
+          <span class="dot" id="micDot"></span>
+          <strong id="micStatus">Preparando micrófono…</strong>
+        </div>
 
-        <div class="question-box">
-          <div class="step" id="stepLabel">Pregunta 1</div>
-          <div class="question" id="questionText"></div>
+        <div class="transcript" id="transcript">Aquí aparecerá lo que la persona vaya diciendo…</div>
 
-          <div class="answer-live">
-            <span class="mic-dot" id="micDot"></span>
-            <span id="liveAnswer">Esperando respuesta…</span>
+        <div class="toolbar" style="margin-top:14px">
+          <button class="primary" id="finishBtn">✅ Terminé de responder</button>
+          <button class="secondary" id="pauseBtn">⏸️ Pausar</button>
+          <button class="danger" id="cancelBtn">Cancelar</button>
+        </div>
+        <p class="hint">
+          El reconocimiento continúa aunque haya pequeñas pausas. Al presionar “Terminé de responder”, se organizan los datos para revisión.
+        </p>
+      </div>
+    </section>
+
+    <section class="review hidden" id="review">
+      <div class="panel">
+        <h2>Revisa antes de guardar</h2>
+        <p>La aplicación intentó identificar cada respuesta. Corrige cualquier dato que no haya quedado bien.</p>
+
+        <div class="grid">
+          <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre">
           </div>
-
-          <div class="status" id="statusText">Preparando micrófono…</div>
-
-          <div class="manual" id="manualWrap">
-            <input id="manualInput" type="text" placeholder="También puedes escribir la respuesta aquí" />
-            <button class="btn-secondary" id="manualSendBtn">Guardar</button>
+          <div class="field">
+            <label for="whatsapp">WhatsApp</label>
+            <input id="whatsapp">
           </div>
-
-          <div class="toolbar">
-            <button class="btn-secondary" id="repeatBtn">🔊 Repetir pregunta</button>
-            <button class="btn-secondary" id="retryBtn">🎙️ Volver a escuchar</button>
-            <button class="btn-danger" id="cancelBtn">Cancelar</button>
+          <div class="field">
+            <label for="correo">Correo electrónico</label>
+            <input id="correo">
+          </div>
+          <div class="field">
+            <label for="ciudad">Ciudad / municipio</label>
+            <input id="ciudad">
+          </div>
+          <div class="field">
+            <label for="primeraVez">¿Primera vez?</label>
+            <select id="primeraVez">
+              <option value="">Sin identificar</option>
+              <option>Sí</option><option>No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="iglesia">¿Asiste a una iglesia?</label>
+            <select id="iglesia">
+              <option value="">Sin identificar</option>
+              <option>Sí</option><option>No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="comoSeEntero">¿Cómo se enteró?</label>
+            <input id="comoSeEntero">
+          </div>
+          <div class="field">
+            <label for="autorizaContacto">¿Desea recibir información?</label>
+            <select id="autorizaContacto">
+              <option value="">Sin identificar</option>
+              <option>Sí</option><option>No</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="peticion">Petición / acompañamiento / oración</label>
+            <textarea id="peticion"></textarea>
+          </div>
+          <div class="field full">
+            <label for="textoCompleto">Transcripción completa</label>
+            <textarea id="textoCompleto" style="min-height:140px"></textarea>
           </div>
         </div>
-      </div>
 
-      <div class="session hidden" id="review">
-        <div class="question-box">
-          <div class="step">Revisión final</div>
-          <div class="question">¿Está correcta la información?</div>
-          <div class="review" id="reviewList"></div>
-          <div class="toolbar">
-            <button class="btn-primary" id="saveBtn">✅ Guardar registro</button>
-            <button class="btn-secondary" id="editBtn">✏️ Corregir</button>
-            <button class="btn-danger" id="reviewCancelBtn">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="config">
-        <label for="sheetUrl">Google Sheets / Apps Script Web App URL (opcional)</label>
-        <input id="sheetUrl" placeholder="https://script.google.com/macros/s/XXXXX/exec" />
-        <div class="small-note">
-          Si pegas aquí la URL de un Web App de Google Apps Script, cada registro se enviará también a tu Google Sheet.
-          Aunque no configures esto, los registros quedarán guardados en este navegador.
+        <div class="toolbar" style="margin-top:16px">
+          <button class="primary" id="saveBtn">💾 Guardar registro</button>
+          <button class="secondary" id="backBtn">🎙️ Volver a escuchar</button>
+          <button class="danger" id="discardBtn">Descartar</button>
         </div>
       </div>
     </section>
-  </main>
 
-  <dialog id="recordsDialog">
-    <div class="modal-head">
-      <div>
-        <strong style="font-size:20px">Registros guardados</strong>
-        <div class="small-note" id="recordCount"></div>
-      </div>
-      <button class="btn-secondary" id="closeRecordsBtn">Cerrar</button>
-    </div>
-    <div class="modal-body">
-      <div class="toolbar" style="margin-top:0;margin-bottom:14px">
-        <button class="btn-secondary" id="exportBtn">⬇️ Exportar CSV</button>
-        <button class="btn-danger" id="clearBtn">🗑️ Borrar registros locales</button>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Nombre</th>
-              <th>WhatsApp</th>
-              <th>Correo</th>
-              <th>Ciudad</th>
-              <th>Primera vez</th>
-              <th>Asiste a iglesia</th>
-              <th>Cómo se enteró</th>
-              <th>Autoriza contacto</th>
-              <th>Petición / oración</th>
-            </tr>
-          </thead>
-          <tbody id="recordsBody"></tbody>
-        </table>
+    <div class="config">
+      <label for="sheetUrl">Google Sheets / Apps Script Web App URL (opcional)</label>
+      <input id="sheetUrl" placeholder="https://script.google.com/macros/s/XXXXX/exec">
+      <div class="hint">
+        Sin esta conexión, los registros se guardan localmente en este navegador y pueden exportarse a CSV.
       </div>
     </div>
-  </dialog>
+  </section>
+</main>
 
-  <div class="toast hidden" id="toast"></div>
+<dialog id="recordsDialog">
+  <div class="modal-head">
+    <div>
+      <strong style="font-size:20px">Registros guardados</strong>
+      <div class="hint" id="recordCount"></div>
+    </div>
+    <button class="secondary" id="closeRecordsBtn">Cerrar</button>
+  </div>
+  <div class="modal-body">
+    <div class="toolbar" style="margin:0 0 14px">
+      <button class="secondary" id="exportBtn">⬇️ Exportar CSV</button>
+      <button class="danger" id="clearBtn">🗑️ Borrar registros locales</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th><th>Nombre</th><th>WhatsApp</th><th>Correo</th><th>Ciudad</th>
+            <th>Primera vez</th><th>Asiste a iglesia</th><th>Cómo se enteró</th>
+            <th>Autoriza contacto</th><th>Petición</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast hidden" id="toast"></div>
 
 <script>
 (() => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const $ = id => document.getElementById(id);
 
-  const questions = [
-    {
-      key: "nombre",
-      label: "Nombre completo",
-      prompt: "¿Cuál es tu nombre completo?",
-      type: "text"
-    },
-    {
-      key: "whatsapp",
-      label: "Número de WhatsApp",
-      prompt: "¿Cuál es tu número de celular o WhatsApp?",
-      type: "text"
-    },
-    {
-      key: "correo",
-      label: "Correo electrónico",
-      prompt: "¿Cuál es tu correo electrónico? Si no deseas darlo, puedes decir omitir.",
-      type: "text",
-      optional: true
-    },
-    {
-      key: "ciudad",
-      label: "Ciudad o municipio",
-      prompt: "¿De qué ciudad o municipio vienes?",
-      type: "text"
-    },
-    {
-      key: "primeraVez",
-      label: "Primera vez en Iglecrecimiento",
-      prompt: "¿Es tu primera vez en Iglecrecimiento? Responde sí o no.",
-      type: "yesno"
-    },
-    {
-      key: "iglesia",
-      label: "Actualmente asiste a una iglesia",
-      prompt: "¿Actualmente asistes a una iglesia? Responde sí o no.",
-      type: "yesno"
-    },
-    {
-      key: "comoSeEntero",
-      label: "Cómo se enteró",
-      prompt: "¿Cómo te enteraste de Iglecrecimiento? Puedes decir: amigo o familiar, iglesia, redes sociales, WhatsApp u otro.",
-      type: "text"
-    },
-    {
-      key: "autorizaContacto",
-      label: "Autoriza recibir información",
-      prompt: "¿Te gustaría recibir información sobre próximos eventos o actividades? Responde sí o no.",
-      type: "yesno"
-    },
-    {
-      key: "peticion",
-      label: "Petición de acompañamiento u oración",
-      prompt: "¿Hay algo en lo que podamos acompañarte u orar por ti? Si no, puedes decir no.",
-      type: "text",
-      optional: true
-    }
-  ];
+  const startBtn=$("startBtn"), recordsBtn=$("recordsBtn"), session=$("session"), review=$("review");
+  const micDot=$("micDot"), micStatus=$("micStatus"), transcriptBox=$("transcript");
+  const finishBtn=$("finishBtn"), pauseBtn=$("pauseBtn"), cancelBtn=$("cancelBtn");
+  const saveBtn=$("saveBtn"), backBtn=$("backBtn"), discardBtn=$("discardBtn");
+  const sheetUrl=$("sheetUrl"), toast=$("toast");
+  const recordsDialog=$("recordsDialog"), recordsBody=$("recordsBody"), recordCount=$("recordCount");
+  const closeRecordsBtn=$("closeRecordsBtn"), exportBtn=$("exportBtn"), clearBtn=$("clearBtn");
 
-  const $ = (id) => document.getElementById(id);
+  let recognition=null, isListening=false, keepListening=false, paused=false;
+  let finalText="", interimText="", restartTimer=null;
 
-  const startBtn = $("startBtn");
-  const recordsBtn = $("recordsBtn");
-  const session = $("session");
-  const review = $("review");
-  const progressBar = $("progressBar");
-  const stepLabel = $("stepLabel");
-  const questionText = $("questionText");
-  const liveAnswer = $("liveAnswer");
-  const micDot = $("micDot");
-  const statusText = $("statusText");
-  const manualInput = $("manualInput");
-  const manualSendBtn = $("manualSendBtn");
-  const repeatBtn = $("repeatBtn");
-  const retryBtn = $("retryBtn");
-  const cancelBtn = $("cancelBtn");
-  const saveBtn = $("saveBtn");
-  const editBtn = $("editBtn");
-  const reviewCancelBtn = $("reviewCancelBtn");
-  const reviewList = $("reviewList");
-  const recordsDialog = $("recordsDialog");
-  const closeRecordsBtn = $("closeRecordsBtn");
-  const recordsBody = $("recordsBody");
-  const recordCount = $("recordCount");
-  const exportBtn = $("exportBtn");
-  const clearBtn = $("clearBtn");
-  const sheetUrl = $("sheetUrl");
-  const toast = $("toast");
+  sheetUrl.value = localStorage.getItem("igle_sheet_url") || "";
+  sheetUrl.addEventListener("change",()=>localStorage.setItem("igle_sheet_url",sheetUrl.value.trim()));
 
-  let recognition = null;
-  let currentIndex = 0;
-  let answers = {};
-  let isListening = false;
-  let isSpeaking = false;
-  let shouldListen = false;
-  let restartTimer = null;
-  let finalTranscript = "";
-  let silenceTimer = null;
-  const SILENCE_MS = 3200; // espera más tiempo antes de dar por terminada la respuesta
-
-  const savedSheetUrl = localStorage.getItem("igle_sheet_url") || "";
-  sheetUrl.value = savedSheetUrl;
-  sheetUrl.addEventListener("change", () => {
-    localStorage.setItem("igle_sheet_url", sheetUrl.value.trim());
-  });
-
-  function showToast(msg, ms=2800){
-    toast.textContent = msg;
-    toast.classList.remove("hidden");
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.add("hidden"), ms);
+  function showToast(msg, ms=3000){
+    toast.textContent=msg; toast.classList.remove("hidden");
+    clearTimeout(toast._t); toast._t=setTimeout(()=>toast.classList.add("hidden"),ms);
   }
 
-  function normalizeYesNo(text){
-    const t = text.toLowerCase().trim();
-    if (/\b(si|sí|claro|correcto|afirmativo|de acuerdo)\b/.test(t)) return "Sí";
-    if (/\b(no|negativo|para nada)\b/.test(t)) return "No";
-    return text;
-  }
-
-  function normalizeAnswer(q, text){
-    let value = (text || "").trim();
-    if (!value) return "";
-    if (q.optional && /^(omitir|no tengo|ninguno|ninguna|no)$/i.test(value)) return "";
-    if (q.type === "yesno") value = normalizeYesNo(value);
-    return value;
-  }
-
-  async function requestMicPermission(){
-    if (!navigator.mediaDevices?.getUserMedia) return true;
+  async function requestMic(){
+    if(!navigator.mediaDevices?.getUserMedia) return true;
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-      stream.getTracks().forEach(t => t.stop());
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      stream.getTracks().forEach(t=>t.stop());
       return true;
-    }catch(err){
-      showToast("No se pudo acceder al micrófono. Puedes continuar escribiendo las respuestas.");
+    }catch(e){
+      showToast("No se pudo activar el micrófono. Revisa el permiso del navegador.");
       return false;
     }
   }
 
-  function setupRecognition(){
-    if (!SpeechRecognition) return;
-
-    recognition = new SpeechRecognition();
-    recognition.lang = "es-CO";
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-      isListening = true;
-      micDot.classList.add("listening");
-      statusText.textContent = "Escuchando… puedes hablar con calma.";
-    };
-
-    recognition.onresult = (event) => {
-      let interim = "";
-      let finalChunk = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) finalChunk += transcript + " ";
-        else interim += transcript;
-      }
-
-      if (finalChunk) finalTranscript += finalChunk;
-      const combined = (finalTranscript + interim).trim();
-
-      liveAnswer.textContent = combined || "Escuchando…";
-
-      clearTimeout(silenceTimer);
-      silenceTimer = setTimeout(() => {
-        const answer = (finalTranscript || combined).trim();
-        if (answer) acceptAnswer(answer);
-      }, SILENCE_MS);
-    };
-
-    recognition.onerror = (event) => {
-      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-        shouldListen = false;
-        statusText.textContent = "Micrófono bloqueado. Puedes escribir la respuesta manualmente.";
-        micDot.classList.remove("listening");
-        return;
-      }
-
-      if (event.error === "no-speech") {
-        statusText.textContent = "No escuché una respuesta. Sigo esperando…";
-      } else if (event.error !== "aborted") {
-        statusText.textContent = "Hubo un problema con el reconocimiento. Reintentando…";
-      }
-    };
-
-    recognition.onend = () => {
-      isListening = false;
-      micDot.classList.remove("listening");
-
-      if (shouldListen && !isSpeaking && !review.classList.contains("hidden") === false) {
-        clearTimeout(restartTimer);
-        restartTimer = setTimeout(startListening, 350);
-      }
-    };
+  function renderTranscript(){
+    const txt=(finalText+" "+interimText).trim();
+    transcriptBox.textContent=txt || "Aquí aparecerá lo que la persona vaya diciendo…";
+    transcriptBox.scrollTop=transcriptBox.scrollHeight;
   }
 
-  function stopListening(){
-    shouldListen = false;
-    clearTimeout(restartTimer);
-    clearTimeout(silenceTimer);
-    if (recognition && isListening) {
-      try { recognition.stop(); } catch(e){}
-    }
-    isListening = false;
-    micDot.classList.remove("listening");
+  function setupRecognition(){
+    if(!SpeechRecognition) return;
+    recognition=new SpeechRecognition();
+    recognition.lang="es-CO";
+    recognition.continuous=true;
+    recognition.interimResults=true;
+    recognition.maxAlternatives=1;
+
+    recognition.onstart=()=>{
+      isListening=true;
+      micDot.classList.add("on");
+      micStatus.textContent="Escuchando… habla con tranquilidad";
+    };
+
+    recognition.onresult=(event)=>{
+      interimText="";
+      for(let i=event.resultIndex;i<event.results.length;i++){
+        const text=event.results[i][0].transcript;
+        if(event.results[i].isFinal) finalText += " " + text;
+        else interimText += " " + text;
+      }
+      renderTranscript();
+    };
+
+    recognition.onerror=(event)=>{
+      if(event.error==="not-allowed" || event.error==="service-not-allowed"){
+        keepListening=false;
+        micStatus.textContent="Micrófono bloqueado";
+        showToast("Activa el permiso del micrófono en el navegador.");
+      }else if(event.error==="no-speech"){
+        micStatus.textContent="Sigo escuchando…";
+      }else if(event.error!=="aborted"){
+        micStatus.textContent="Reconectando micrófono…";
+      }
+    };
+
+    recognition.onend=()=>{
+      isListening=false;
+      micDot.classList.remove("on");
+      if(keepListening && !paused){
+        clearTimeout(restartTimer);
+        restartTimer=setTimeout(startListening,350);
+      }
+    };
   }
 
   function startListening(){
-    if (!recognition || isSpeaking || review.classList.contains("hidden") === false) return;
-    shouldListen = true;
-    if (!isListening) {
-      try {
-        recognition.start();
-      } catch(e) {
-        clearTimeout(restartTimer);
-        restartTimer = setTimeout(startListening, 600);
-      }
+    if(!recognition || isListening || paused) return;
+    keepListening=true;
+    try{ recognition.start(); }
+    catch(e){ restartTimer=setTimeout(startListening,550); }
+  }
+
+  function stopListening(){
+    keepListening=false;
+    clearTimeout(restartTimer);
+    if(recognition && isListening){
+      try{recognition.stop()}catch(e){}
     }
-  }
-
-  function speak(text, after=true){
-    stopListening();
-    window.speechSynthesis.cancel();
-
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "es-CO";
-    utter.rate = 0.95;
-    utter.pitch = 1;
-
-    isSpeaking = true;
-    statusText.textContent = "Escucha la pregunta…";
-
-    utter.onend = () => {
-      isSpeaking = false;
-      if (after) {
-        finalTranscript = "";
-        liveAnswer.textContent = "Esperando respuesta…";
-        startListening();
-      }
-    };
-
-    utter.onerror = () => {
-      isSpeaking = false;
-      if (after) startListening();
-    };
-
-    window.speechSynthesis.speak(utter);
-  }
-
-  function updateQuestion(){
-    const q = questions[currentIndex];
-    if (!q) return showReview();
-
-    stepLabel.textContent = `Pregunta ${currentIndex + 1} de ${questions.length}`;
-    questionText.textContent = q.prompt;
-    progressBar.style.width = `${(currentIndex / questions.length) * 100}%`;
-    manualInput.value = answers[q.key] || "";
-    manualInput.placeholder = q.optional
-      ? "Puedes escribir la respuesta o dejarla en blanco"
-      : "También puedes escribir la respuesta aquí";
-
-    finalTranscript = "";
-    liveAnswer.textContent = "Esperando respuesta…";
-    speak(q.prompt);
-  }
-
-  function acceptAnswer(raw){
-    const q = questions[currentIndex];
-    if (!q) return;
-
-    const value = normalizeAnswer(q, raw);
-
-    if (!value && !q.optional) {
-      showToast("Necesito una respuesta para continuar.");
-      finalTranscript = "";
-      liveAnswer.textContent = "Intenta nuevamente…";
-      speak("No alcancé a registrar una respuesta. Por favor, repítela.");
-      return;
-    }
-
-    stopListening();
-    answers[q.key] = value;
-    liveAnswer.textContent = value || "Omitido";
-
-    currentIndex++;
-    setTimeout(updateQuestion, 500);
+    isListening=false;
+    micDot.classList.remove("on");
   }
 
   async function begin(){
-    startBtn.disabled = true;
-    answers = {};
-    currentIndex = 0;
-    finalTranscript = "";
-
+    const ok=await requestMic();
     session.classList.remove("hidden");
     review.classList.add("hidden");
+    finalText=""; interimText=""; paused=false;
+    renderTranscript();
 
-    await requestMicPermission();
-
-    if (!SpeechRecognition) {
-      statusText.textContent = "Este navegador no admite reconocimiento de voz. Usa Google Chrome o Microsoft Edge, o escribe manualmente.";
-      showToast("Para usar voz, abre este archivo en Chrome o Edge.");
-    } else if (!recognition) {
-      setupRecognition();
+    if(!SpeechRecognition){
+      micStatus.textContent="Este navegador no admite reconocimiento de voz.";
+      showToast("Usa Google Chrome o Microsoft Edge para el modo de voz.");
+      return;
     }
 
-    updateQuestion();
-    startBtn.disabled = false;
+    if(!recognition) setupRecognition();
+    if(ok) startListening();
   }
 
-  function showReview(){
-    stopListening();
-    window.speechSynthesis.cancel();
-    session.classList.add("hidden");
-    review.classList.remove("hidden");
-    progressBar.style.width = "100%";
-
-    reviewList.innerHTML = "";
-    for (const q of questions) {
-      const row = document.createElement("div");
-      row.className = "review-row";
-      const strong = document.createElement("strong");
-      strong.textContent = q.label;
-      const span = document.createElement("span");
-      span.textContent = answers[q.key] || "—";
-      row.append(strong, span);
-      reviewList.appendChild(row);
-    }
-
-    const msg = answers.nombre
-      ? `${answers.nombre}, revisa por favor que la información sea correcta.`
-      : "Revisa por favor que la información sea correcta.";
-
-    const utter = new SpeechSynthesisUtterance(msg);
-    utter.lang = "es-CO";
-    utter.rate = 0.95;
-    window.speechSynthesis.speak(utter);
+  function normalize(s){
+    return (s||"").toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .replace(/[.,;:!?¿¡]/g," ")
+      .replace(/\s+/g," ").trim();
   }
 
-  async function saveRecord(){
-    const record = {
-      fecha: new Date().toISOString(),
-      ...answers
-    };
-
-    const records = getRecords();
-    records.push(record);
-    localStorage.setItem("igle_records", JSON.stringify(records));
-
-    const url = sheetUrl.value.trim();
-    let sheetOk = false;
-
-    if (url) {
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify(record)
-        });
-        sheetOk = true; // con no-cors no podemos leer la respuesta, pero el envío se intenta
-      } catch(err){
-        console.warn("Google Sheets:", err);
+  function yesNoNear(text, keywords){
+    const n=normalize(text);
+    for(const kw of keywords){
+      const pos=n.indexOf(kw);
+      if(pos>=0){
+        const area=n.slice(Math.max(0,pos-35),Math.min(n.length,pos+90));
+        if(/\b(no|negativo|para nada)\b/.test(area)) return "No";
+        if(/\b(si|claro|afirmativo|correcto)\b/.test(area)) return "Sí";
       }
     }
+    return "";
+  }
 
-    window.speechSynthesis.cancel();
-    const name = record.nombre ? `, ${record.nombre}` : "";
-    const thanks = new SpeechSynthesisUtterance(`Gracias${name}. Tu registro en Iglecrecimiento fue realizado correctamente.`);
-    thanks.lang = "es-CO";
-    thanks.rate = 0.95;
-    window.speechSynthesis.speak(thanks);
+  function extractEmail(text){
+    const direct=(text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];
+    if(direct) return direct;
 
-    showToast(url
-      ? "Registro guardado localmente y enviado a Google Sheets."
-      : "Registro guardado en este dispositivo.");
+    let n=normalize(text)
+      .replace(/\barroba\b/g,"@")
+      .replace(/\bpunto\b/g,".")
+      .replace(/\bguion bajo\b/g,"_")
+      .replace(/\bespacio\b/g,"");
+    const m=n.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
+    return m?m[0]:"";
+  }
 
-    review.classList.add("hidden");
+  function extractPhone(text){
+    const digits=text.replace(/[^\d+]/g," ");
+    const matches=digits.match(/(?:\+?57\s*)?(?:3\d{2})[\s-]*\d{3}[\s-]*\d{4}/g);
+    if(matches?.length) return matches[0].replace(/[^\d+]/g,"");
+    const any=(text.match(/\b\d[\d\s-]{8,14}\d\b/)||[])[0];
+    return any?any.replace(/\D/g,""):"";
+  }
+
+  function extractName(text){
+    const patterns=[
+      /(?:me llamo|mi nombre es|soy)\s+([a-záéíóúñü]+(?:\s+[a-záéíóúñü]+){1,4})/i,
+      /(?:nombre completo(?: es)?)[\s:]+([a-záéíóúñü]+(?:\s+[a-záéíóúñü]+){1,4})/i
+    ];
+    for(const p of patterns){
+      const m=text.match(p);
+      if(m) return m[1].trim();
+    }
+    return "";
+  }
+
+  function extractCity(text){
+    const patterns=[
+      /(?:vengo de|soy de|vivo en|mi ciudad es|mi municipio es)\s+([a-záéíóúñü\s]{2,40})/i,
+      /(?:ciudad|municipio)[\s:]+([a-záéíóúñü\s]{2,40})/i
+    ];
+    for(const p of patterns){
+      const m=text.match(p);
+      if(m){
+        return m[1].split(/\b(?:y|si|no|actualmente|me enter[eé]|quiero|deseo)\b/i)[0].trim();
+      }
+    }
+    return "";
+  }
+
+  function extractHow(text){
+    const n=normalize(text);
+    if(/amigo|amiga|familiar|familia/.test(n)) return "Invitación de un amigo o familiar";
+    if(/redes|facebook|instagram|tiktok/.test(n)) return "Redes sociales";
+    if(/whatsapp/.test(n)) return "WhatsApp";
+    if(/iglesia|pastor|lider/.test(n)) return "Iglesia";
+    if(/otro|volante|publicidad|radio/.test(n)) return "Otro";
+    return "";
+  }
+
+  function extractPrayer(text){
+    const patterns=[
+      /(?:orar por|oracion por|peticion(?: es)?|acompanarme en)\s+(.+)/i,
+      /(?:quiero que oren por|pueden orar por)\s+(.+)/i
+    ];
+    for(const p of patterns){
+      const m=text.match(p);
+      if(m) return m[1].trim();
+    }
+    return "";
+  }
+
+  function parseTranscript(text){
+    const n=normalize(text);
+
+    return {
+      nombre: extractName(text),
+      whatsapp: extractPhone(text),
+      correo: extractEmail(text),
+      ciudad: extractCity(text),
+      primeraVez: yesNoNear(text,["primera vez","primera ocasion","primera"]),
+      iglesia: yesNoNear(text,["asisto a una iglesia","asistes a una iglesia","iglesia actualmente","actualmente asisto"]),
+      comoSeEntero: extractHow(text),
+      autorizaContacto: yesNoNear(text,["recibir informacion","proximos eventos","mantenerme informado","informacion de eventos"]),
+      peticion: extractPrayer(text),
+      textoCompleto: text.trim()
+    };
+  }
+
+  function fillReview(data){
+    ["nombre","whatsapp","correo","ciudad","primeraVez","iglesia","comoSeEntero","autorizaContacto","peticion","textoCompleto"]
+      .forEach(k=>$(k).value=data[k]||"");
+  }
+
+  function finish(){
+    if(interimText.trim()) finalText += " " + interimText;
+    interimText="";
+    stopListening();
+
+    const full=finalText.trim();
+    if(!full){
+      showToast("No se detectó ninguna respuesta todavía.");
+      return;
+    }
+
+    const parsed=parseTranscript(full);
+    fillReview(parsed);
     session.classList.add("hidden");
+    review.classList.remove("hidden");
+  }
 
-    setTimeout(() => {
-      answers = {};
-      currentIndex = 0;
-    }, 300);
+  function currentRecord(){
+    return {
+      fecha:new Date().toISOString(),
+      nombre:$("nombre").value.trim(),
+      whatsapp:$("whatsapp").value.trim(),
+      correo:$("correo").value.trim(),
+      ciudad:$("ciudad").value.trim(),
+      primeraVez:$("primeraVez").value,
+      iglesia:$("iglesia").value,
+      comoSeEntero:$("comoSeEntero").value.trim(),
+      autorizaContacto:$("autorizaContacto").value,
+      peticion:$("peticion").value.trim(),
+      textoCompleto:$("textoCompleto").value.trim()
+    };
   }
 
   function getRecords(){
-    try {
-      return JSON.parse(localStorage.getItem("igle_records") || "[]");
-    } catch(e) {
-      return [];
+    try{return JSON.parse(localStorage.getItem("igle_records")||"[]")}catch(e){return[]}
+  }
+
+  async function saveRecord(){
+    const r=currentRecord();
+    if(!r.nombre){
+      showToast("Revisa el nombre antes de guardar.");
+      return;
     }
+
+    const records=getRecords();
+    records.push(r);
+    localStorage.setItem("igle_records",JSON.stringify(records));
+
+    const url=sheetUrl.value.trim();
+    if(url){
+      try{
+        await fetch(url,{
+          method:"POST",
+          mode:"no-cors",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(r)
+        });
+        showToast("Registro guardado y enviado a Google Sheets.");
+      }catch(e){
+        showToast("Guardado localmente. No fue posible enviar a Google Sheets.");
+      }
+    }else{
+      showToast("Registro guardado en este dispositivo.");
+    }
+
+    review.classList.add("hidden");
+    finalText=""; interimText="";
+    renderTranscript();
   }
 
   function openRecords(){
-    const records = getRecords();
-    recordCount.textContent = `${records.length} registro${records.length === 1 ? "" : "s"} guardado${records.length === 1 ? "" : "s"} en este navegador.`;
-    recordsBody.innerHTML = "";
-
-    records.slice().reverse().forEach(r => {
-      const tr = document.createElement("tr");
-      const cells = [
-        r.fecha ? new Date(r.fecha).toLocaleString("es-CO") : "",
-        r.nombre || "",
-        r.whatsapp || "",
-        r.correo || "",
-        r.ciudad || "",
-        r.primeraVez || "",
-        r.iglesia || "",
-        r.comoSeEntero || "",
-        r.autorizaContacto || "",
-        r.peticion || ""
-      ];
-
-      cells.forEach(v => {
-        const td = document.createElement("td");
-        td.textContent = v;
-        tr.appendChild(td);
+    const records=getRecords();
+    recordCount.textContent=`${records.length} registro${records.length===1?"":"s"} guardado${records.length===1?"":"s"} en este navegador.`;
+    recordsBody.innerHTML="";
+    records.slice().reverse().forEach(r=>{
+      const tr=document.createElement("tr");
+      [
+        r.fecha?new Date(r.fecha).toLocaleString("es-CO"):"",
+        r.nombre||"",r.whatsapp||"",r.correo||"",r.ciudad||"",
+        r.primeraVez||"",r.iglesia||"",r.comoSeEntero||"",
+        r.autorizaContacto||"",r.peticion||""
+      ].forEach(v=>{
+        const td=document.createElement("td");td.textContent=v;tr.appendChild(td);
       });
-
       recordsBody.appendChild(tr);
     });
-
     recordsDialog.showModal();
   }
 
   function exportCSV(){
-    const records = getRecords();
-    if (!records.length) {
-      showToast("No hay registros para exportar.");
-      return;
-    }
-
-    const headers = [
-      "Fecha","Nombre","WhatsApp","Correo","Ciudad","Primera vez",
-      "Asiste a iglesia","Cómo se enteró","Autoriza contacto","Petición / oración"
-    ];
-
-    const rows = records.map(r => [
-      r.fecha || "", r.nombre || "", r.whatsapp || "", r.correo || "", r.ciudad || "",
-      r.primeraVez || "", r.iglesia || "", r.comoSeEntero || "", r.autorizaContacto || "", r.peticion || ""
-    ]);
-
-    const esc = (v) => `"${String(v).replaceAll('"','""')}"`;
-    const csv = "\uFEFF" + [headers, ...rows].map(row => row.map(esc).join(";")).join("\n");
-
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `registros_iglecrecimiento_${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
+    const records=getRecords();
+    if(!records.length){showToast("No hay registros para exportar.");return}
+    const headers=["Fecha","Nombre","WhatsApp","Correo","Ciudad","Primera vez","Asiste a iglesia","Cómo se enteró","Autoriza contacto","Petición","Transcripción"];
+    const rows=records.map(r=>[r.fecha||"",r.nombre||"",r.whatsapp||"",r.correo||"",r.ciudad||"",r.primeraVez||"",r.iglesia||"",r.comoSeEntero||"",r.autorizaContacto||"",r.peticion||"",r.textoCompleto||""]);
+    const esc=v=>`"${String(v).replaceAll('"','""')}"`;
+    const csv="\uFEFF"+[headers,...rows].map(row=>row.map(esc).join(";")).join("\n");
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url;a.download=`registros_iglecrecimiento_${new Date().toISOString().slice(0,10)}.csv`;a.click();
     URL.revokeObjectURL(url);
   }
 
-  startBtn.addEventListener("click", begin);
-  recordsBtn.addEventListener("click", openRecords);
+  startBtn.addEventListener("click",begin);
+  finishBtn.addEventListener("click",finish);
 
-  manualSendBtn.addEventListener("click", () => acceptAnswer(manualInput.value));
-  manualInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      acceptAnswer(manualInput.value);
+  pauseBtn.addEventListener("click",()=>{
+    paused=!paused;
+    if(paused){
+      if(interimText.trim()) finalText+=" "+interimText;
+      interimText="";
+      stopListening();
+      micStatus.textContent="Micrófono pausado";
+      pauseBtn.textContent="▶️ Continuar";
+    }else{
+      pauseBtn.textContent="⏸️ Pausar";
+      keepListening=true;
+      startListening();
     }
   });
 
-  repeatBtn.addEventListener("click", () => {
-    const q = questions[currentIndex];
-    if (q) speak(q.prompt);
+  cancelBtn.addEventListener("click",()=>{
+    stopListening();session.classList.add("hidden");finalText="";interimText="";renderTranscript();
   });
 
-  retryBtn.addEventListener("click", () => {
-    finalTranscript = "";
-    liveAnswer.textContent = "Esperando respuesta…";
-    startListening();
+  backBtn.addEventListener("click",()=>{
+    finalText=$("textoCompleto").value.trim();
+    review.classList.add("hidden");session.classList.remove("hidden");
+    paused=false;pauseBtn.textContent="⏸️ Pausar";renderTranscript();startListening();
   });
 
-  cancelBtn.addEventListener("click", () => {
-    stopListening();
-    window.speechSynthesis.cancel();
-    session.classList.add("hidden");
-    answers = {};
-    currentIndex = 0;
+  discardBtn.addEventListener("click",()=>{
+    review.classList.add("hidden");finalText="";interimText="";renderTranscript();
   });
 
-  reviewCancelBtn.addEventListener("click", () => {
-    window.speechSynthesis.cancel();
-    review.classList.add("hidden");
-    answers = {};
-    currentIndex = 0;
-  });
+  saveBtn.addEventListener("click",saveRecord);
+  recordsBtn.addEventListener("click",openRecords);
+  closeRecordsBtn.addEventListener("click",()=>recordsDialog.close());
+  exportBtn.addEventListener("click",exportCSV);
 
-  editBtn.addEventListener("click", () => {
-    review.classList.add("hidden");
-    session.classList.remove("hidden");
-    currentIndex = 0;
-    updateQuestion();
-  });
-
-  saveBtn.addEventListener("click", saveRecord);
-
-  closeRecordsBtn.addEventListener("click", () => recordsDialog.close());
-  exportBtn.addEventListener("click", exportCSV);
-
-  clearBtn.addEventListener("click", () => {
-    if (confirm("¿Seguro que quieres borrar todos los registros guardados localmente en este navegador?")) {
+  clearBtn.addEventListener("click",()=>{
+    if(confirm("¿Seguro que quieres borrar todos los registros guardados localmente?")){
       localStorage.removeItem("igle_records");
       openRecords();
       showToast("Registros locales borrados.");
     }
   });
-
 })();
 </script>
 </body>
