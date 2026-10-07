@@ -58,7 +58,7 @@ function startBuilderVoice(){
 $$('.accbtn').forEach(b=>b.onclick=()=>b.parentElement.classList.toggle('open'));const map={quiz:'quiz',email:'email',edit:'edit',limit:'limit',progress:'progress',shuffle:'shuffle',defreq:'defreq'};for(const[id,key]of Object.entries(map)){const e=$('#'+id);e.checked=!!state.survey.settings[key];e.onchange=()=>{state.survey.settings[key]=e.checked;save()}}$('#confirm').value=state.survey.settings.confirm;$('#confirm').oninput=e=>{state.survey.settings.confirm=e.target.value;save()};$('#voicemode').value=state.survey.settings.voice;$('#voicemode').onchange=e=>{state.survey.settings.voice=e.target.value;save()};function renderResponses(){const x=$('#responses');if(!state.responses.length){x.innerHTML='<div class="mini" style="padding:35px;text-align:center">Aún no hay respuestas.</div>';return}x.innerHTML=`<h2>${state.responses.length} respuestas</h2>`+state.responses.map((r,i)=>`<details class="sheet" style="padding:14px"><summary><strong>Respuesta ${state.responses.length-i}</strong> · ${new Date(r.createdAt).toLocaleString('es-CO')}</summary>${r.answers.map(a=>`<p><strong>${esc(a.question)}</strong><br>${esc(Array.isArray(a.answer)?a.answer.join(', '):a.answer||'—')}</p>`).join('')}</details>`).join('')}
 $('#preview').onclick=()=>startRun(true);$('#respond').onclick=()=>startRun(false);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function startRun(preview){const qs=state.survey.settings.shuffle?shuffle([...state.survey.questions]):[...state.survey.questions];state.run={preview,qs,answers:{},current:0,rec:null,stream:null,listening:false,keep:true,processing:false,buffer:[],bufferQid:null,silenceTimer:null,lastByQuestion:{},reviewFlags:{},captureBlockedUntil:0};$('#builder').classList.add('hidden');$('#runner').classList.remove('hidden');renderRun();startMic()}
+function startRun(preview){const qs=state.survey.settings.shuffle?shuffle([...state.survey.questions]):[...state.survey.questions];state.run={preview,qs,answers:{},current:0,rec:null,stream:null,listening:false,keep:true,processing:false,buffer:[],interim:'',bufferQid:null,silenceTimer:null,lastByQuestion:{},reviewFlags:{},captureBlockedUntil:0};$('#builder').classList.add('hidden');$('#runner').classList.remove('hidden');renderRun();startMic()}
 function answerUI(q,a){a=a??'';if(q.type==='short')return`<input data-a="${q.id}" type="text" value="${esc(a)}">`;if(q.type==='paragraph')return`<textarea data-a="${q.id}">${esc(a)}</textarea>`;if(q.type==='multiple')return`<div class="choices">${q.options.map(o=>`<label class="choice"><input data-radio="${q.id}" type="radio" name="${q.id}" value="${esc(o)}" ${a===o?'checked':''}>${esc(o)}</label>`).join('')}</div>`;if(q.type==='checkbox')return`<div class="choices">${q.options.map(o=>`<label class="choice"><input data-check="${q.id}" type="checkbox" value="${esc(o)}" ${Array.isArray(a)&&a.includes(o)?'checked':''}>${esc(o)}</label>`).join('')}</div>`;if(q.type==='dropdown')return`<select data-a="${q.id}"><option value="">Selecciona</option>${q.options.map(o=>`<option ${a===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`;if(q.type==='file')return'<input type="file"><div class="mini">Selección manual.</div>';if(q.type==='scale'||q.type==='rating'){const min=q.type==='rating'?1:q.scaleMin,max=q.type==='rating'?5:q.scaleMax;return`<div class="scale">${Array.from({length:max-min+1},(_,k)=>k+min).map(n=>`<label>${q.type==='rating'?'☆':n}<input data-radio="${q.id}" name="${q.id}" type="radio" value="${n}" ${String(a)===String(n)?'checked':''}></label>`).join('')}</div>`}if(q.type==='date')return`<input data-a="${q.id}" type="date" value="${esc(a)}">`;if(q.type==='time')return`<input data-a="${q.id}" type="time" value="${esc(a)}">`;if(['grid','checkgrid'].includes(q.type))return`<table class="gridtable"><tr><th></th>${q.columns.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${q.rows.map((r,ri)=>`<tr><td>${esc(r)}</td>${q.columns.map(c=>`<td><input type="${q.type==='grid'?'radio':'checkbox'}" name="${q.id}_${ri}"></td>`).join('')}</tr>`).join('')}</table>`;return''}
 function renderRun(){const s=state.survey,r=state.run;$('#runner').innerHTML=`<div class="run" style="background:${getComputedStyle(document.documentElement).getPropertyValue('--bg')}"><div class="runinner"><div class="micbar"><span class="micdot" id="micdot"></span><strong id="mictxt">Activando micrófono…</strong><span class="phase"><span class="phase-dot active" id="phaseDot"></span><span class="mini" id="phaseText">Escuchando</span></span></div><div class="sheet header">${s.banner?`<div class="banner" style="background-image:url('${s.banner}')"></div>`:''}<div class="headbody"><h1>${esc(s.title)}</h1><div class="mini">${esc(s.desc)}</div></div></div>${s.settings.progress?`<div style="height:6px;background:#ddd;border-radius:8px;margin-bottom:12px"><div style="height:100%;width:${((r.current+1)/r.qs.length)*100}%;background:var(--p);transition:.2s"></div></div>`:''}${r.qs.map((q,i)=>`<section class="ans ${i===r.current?'current':''}" data-cardrun="${i}"><h3>${esc(q.title)}${q.required?' <span style="color:#d93025">*</span>':''}</h3>${answerUI(q,r.answers[q.id])}<div class="interpret hidden" id="int_${q.id}"></div></section>`).join('')}<div style="display:flex;justify-content:space-between"><button class="soft btn" id="cancelrun">Cancelar</button><button class="primary btn" id="reviewrun">Revisar respuestas</button></div></div></div>`;bindRun();focusCard()}
 function bindRun(){
@@ -69,7 +69,7 @@ function bindRun(){
   $('#cancelrun').onclick=exitRun;$('#reviewrun').onclick=reviewRun
 }
 function focusCard(){$$('[data-cardrun]').forEach((c,i)=>c.classList.toggle('current',i===state.run.current));$(`[data-cardrun="${state.run.current}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});resetVoiceBuffer()}
-function resetVoiceBuffer(){if(!state.run)return;clearTimeout(state.run.silenceTimer);state.run.buffer=[];state.run.bufferQid=state.run.qs[state.run.current]?.id||null}
+function resetVoiceBuffer(){if(!state.run)return;clearTimeout(state.run.silenceTimer);state.run.buffer=[];state.run.interim='';state.run.bufferQid=state.run.qs[state.run.current]?.id||null}
 async function startMic(){
   if(!state.run)return;
   try{if(navigator.mediaDevices?.getUserMedia&&!state.run.stream)state.run.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}catch(e){}
@@ -77,9 +77,9 @@ async function startMic(){
 }
 function recognize(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){if($('#mictxt'))$('#mictxt').textContent='Reconocimiento de voz no disponible. Responde manualmente.';return}
-  if(!state.run||state.run.listening)return;const rec=new SR();state.run.rec=rec;rec.lang='es-CO';rec.continuous=true;rec.interimResults=false;rec.maxAlternatives=1;
+  if(!state.run||state.run.listening)return;const rec=new SR();state.run.rec=rec;rec.lang='es-CO';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
   rec.onstart=()=>{if(!state.run)return;state.run.listening=true;$('#micdot')?.classList.add('on');setMicPhase('Escuchando','listen')};
-  rec.onresult=e=>{if(!state.run)return;for(let i=e.resultIndex;i<e.results.length;i++){if(!e.results[i].isFinal)continue;queueVoicePhrase(e.results[i][0].transcript.trim())}};
+  rec.onresult=e=>{if(!state.run)return;let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const raw=e.results[i][0].transcript.trim();if(!raw)continue;if(e.results[i].isFinal)queueVoicePhrase(raw,true);else interim+=(interim?' ':'')+raw}if(interim)queueVoicePhrase(interim,false)};
   rec.onerror=e=>{if(!state.run)return;if(['not-allowed','service-not-allowed'].includes(e.error)){state.run.keep=false;if($('#mictxt'))$('#mictxt').textContent='Micrófono bloqueado. Responde manualmente.'}};
   rec.onend=()=>{if(!state.run)return;state.run.listening=false;$('#micdot')?.classList.remove('on');if(state.run.keep)setTimeout(()=>{if(state.run)recognize()},320)};
   try{rec.start()}catch(e){}
@@ -87,18 +87,29 @@ function recognize(){
 function stopMic(){if(!state.run)return;state.run.keep=false;clearTimeout(state.run.silenceTimer);try{state.run.rec?.stop()}catch(e){}state.run.stream?.getTracks()?.forEach(t=>t.stop())}
 function norm(s=''){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s@.+:-]/g,' ').replace(/\s+/g,' ').trim()}
 function setMicPhase(label,phase='listen'){const t=$('#mictxt');if(t)t.textContent=phase==='listen'?'Escuchando en segundo plano':label;const p=$('#phaseText');if(p)p.textContent=label;const d=$('#phaseDot');if(d)d.classList.toggle('active',phase!=='done')}
-function queueVoicePhrase(raw){
+function voiceWait(q,isFinal){
+  if(['multiple','dropdown','scale','rating','date','time'].includes(q.type))return isFinal?180:520;
+  if(q.type==='checkbox')return isFinal?300:650;
+  return isFinal?620:950;
+}
+function queueVoicePhrase(raw,isFinal=true){
   const r=state.run;if(!r||r.processing||Date.now()<r.captureBlockedUntil)return;const q=r.qs[r.current];if(!q)return;const n=norm(raw);if(!n)return;
-  if(r.bufferQid!==q.id){r.buffer=[];r.bufferQid=q.id}
-  const prev=r.lastByQuestion[q.id];const now=Date.now();if(prev&&now-prev.at<6500&&(n===prev.text||sim(n,prev.text)>.88))return;
-  r.lastByQuestion[q.id]={text:n,at:now};
-  if(!r.buffer.some(x=>sim(norm(x),n)>.9))r.buffer.push(raw);
-  clearTimeout(r.silenceTimer);setMicPhase('Escuchando','listen');r.silenceTimer=setTimeout(processVoiceBuffer,2400)
+  if(r.bufferQid!==q.id){r.buffer=[];r.interim='';r.bufferQid=q.id}
+  if(isFinal){
+    const prev=r.lastByQuestion[q.id],now=Date.now();if(prev&&now-prev.at<4500&&(n===prev.text||sim(n,prev.text)>.93))return;
+    r.lastByQuestion[q.id]={text:n,at:now};
+    if(!r.buffer.some(x=>sim(norm(x),n)>.94))r.buffer.push(raw);
+    r.interim='';
+  }else{
+    r.interim=raw;
+  }
+  clearTimeout(r.silenceTimer);setMicPhase('Escuchando','listen');r.silenceTimer=setTimeout(processVoiceBuffer,voiceWait(q,isFinal))
 }
 function processVoiceBuffer(){
-  const r=state.run;if(!r||r.processing||!r.buffer.length)return;const q=r.qs[r.current];if(!q)return;
-  const raw=r.buffer.join(' ').trim();r.buffer=[];r.processing=true;setMicPhase('Interpretando…','think');if($('#mictxt'))$('#mictxt').innerHTML='<span class="thinking">Interpretando respuesta <b></b><b></b><b></b></span>';
-  setTimeout(()=>{if(!state.run)return;const z=interpret(raw,q);if(z.ok){r.answers[q.id]=z.v;if(z.review)r.reviewFlags[q.id]=z.msg||'Conviene revisar esta respuesta.';else delete r.reviewFlags[q.id];apply(q,z.v);showInt(q,z.msg||'Respuesta identificada.');r.captureBlockedUntil=Date.now()+950;setMicPhase(z.review?'Respuesta para revisar':'Respuesta identificada','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},850)}else{r.reviewFlags[q.id]=z.msg||'No pude determinar esta respuesta.';showInt(q,z.msg||'No pude determinar esta respuesta. La revisaremos al final.');r.captureBlockedUntil=Date.now()+800;setMicPhase('Respuesta para revisar','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},900)}r.processing=false},520)
+  const r=state.run;if(!r||r.processing)return;const q=r.qs[r.current];if(!q)return;
+  const raw=[r.buffer.join(' ').trim(),r.interim.trim()].filter(Boolean).join(' ').trim();if(!raw)return;
+  r.buffer=[];r.interim='';r.processing=true;setMicPhase('Interpretando…','think');if($('#mictxt'))$('#mictxt').innerHTML='<span class="thinking">Interpretando respuesta <b></b><b></b><b></b></span>';
+  setTimeout(()=>{if(!state.run)return;const z=interpret(raw,q);if(z.ok){r.answers[q.id]=z.v;if(z.review)r.reviewFlags[q.id]=z.msg||'Conviene revisar esta respuesta.';else delete r.reviewFlags[q.id];apply(q,z.v);showInt(q,z.msg||'Respuesta identificada.');r.captureBlockedUntil=Date.now()+320;setMicPhase(z.review?'Respuesta para revisar':'Respuesta identificada','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},380)}else{r.reviewFlags[q.id]=z.msg||'No pude determinar esta respuesta.';showInt(q,z.msg||'No pude determinar esta respuesta. La revisaremos al final.');r.captureBlockedUntil=Date.now()+280;setMicPhase('Respuesta para revisar','done');if(r.current<r.qs.length-1)setTimeout(()=>{if(state.run){r.current++;focusCard();setMicPhase('Escuchando','listen')}},430)}r.processing=false},120)
 }
 function sim(a,b){if(!a||!b)return 0;if(a===b)return 1;if(a.includes(b)||b.includes(a))return .94;const A=new Set(a.split(' ').filter(x=>x.length>1)),B=new Set(b.split(' ').filter(x=>x.length>1));const inter=[...A].filter(x=>B.has(x)).length,union=new Set([...A,...B]).size;const j=union?inter/union:0;return j}
 function aliasScore(n,words){let s=0;for(const w of words){const x=norm(w);if(n.includes(x))s=Math.max(s,x.includes(' ')?0.93:0.82)}return s}
@@ -130,10 +141,10 @@ function time(n){let h=null,mi=0;const D={una:1,uno:1,dos:2,tres:3,cuatro:4,cinc
 function interpret(raw,q){
   const n=norm(raw);
   if(['multiple','dropdown'].includes(q.type)){
-    const b=semanticChoice(n,q);if(b.s>=.62)return{ok:true,v:b.o,confidence:b.s,msg:`Respuesta identificada: “${b.o}”.`};if(b.s>=.42)return{ok:true,v:b.o,confidence:b.s,review:true,msg:`Interpreté “${b.o}”, pero conviene verificarla al final.`};return{ok:false,confidence:b.s,msg:'No pude relacionar con suficiente seguridad lo que escuché con una opción. La dejé para revisión.'}
+    const b=semanticChoice(n,q);if(b.s>=.50)return{ok:true,v:b.o,confidence:b.s,msg:`Respuesta identificada: “${b.o}”.`};if(b.s>=.30)return{ok:true,v:b.o,confidence:b.s,review:true,msg:`Interpreté “${b.o}”, pero conviene verificarla al final.`};return{ok:false,confidence:b.s,msg:'No pude relacionar con suficiente seguridad lo que escuché con una opción. La dejé para revisión.'}
   }
   if(q.type==='checkbox'){
-    const hits=(q.options||[]).map(o=>({o,s:semanticChoice(n,{...q,type:'multiple',options:[o]}).s})).filter(x=>x.s>=.55).map(x=>x.o);return hits.length?{ok:true,v:hits,confidence:.75,msg:`Seleccioné: ${hits.join(', ')}.`}:{ok:false,msg:'No identifiqué opciones con suficiente seguridad; revísala al final.'}
+    const hits=(q.options||[]).map(o=>({o,s:semanticChoice(n,{...q,type:'multiple',options:[o]}).s})).filter(x=>x.s>=.42).map(x=>x.o);return hits.length?{ok:true,v:hits,confidence:.75,msg:`Seleccioné: ${hits.join(', ')}.`}:{ok:false,msg:'No identifiqué opciones con suficiente seguridad; revísala al final.'}
   }
   if(['scale','rating'].includes(q.type)){const v=num(n),min=q.type==='rating'?1:q.scaleMin,max=q.type==='rating'?5:q.scaleMax;return v>=min&&v<=max?{ok:true,v:String(v),confidence:.96,msg:`Calificación identificada: ${v}.`}:{ok:false,msg:`No identifiqué un número entre ${min} y ${max}; revísala al final.`}}
   if(q.type==='date'){const v=date(n);return v?{ok:true,v,confidence:.9,msg:`Fecha identificada: ${v}.`}:{ok:false,msg:'No pude determinar la fecha con seguridad; revísala al final.'}}
